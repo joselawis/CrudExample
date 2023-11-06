@@ -8,6 +8,8 @@ public class CountriesServiceTest
 {
     private readonly ICountriesService _countriesService = new CountriesService();
 
+    #region AddCountry
+
     // When CountryAddRequest is null, it should throw ArgumentNullException
     [Fact]
     public void AddCountry_NullCountry()
@@ -59,8 +61,45 @@ public class CountriesServiceTest
         };
 
         var response = _countriesService.AddCountry(request);
+        var countriesFromGetAllCountries = _countriesService.GetAllCountries();
 
         Assert.True(response.CountryId != Guid.Empty);
         Assert.Equal(request.CountryName, response.CountryName);
+        Assert.Contains(response, countriesFromGetAllCountries);
     }
+
+    #endregion
+
+    #region GetAllCountries
+
+    // The list of countries should be empty by default
+    [Fact]
+    public void GetAllCountries_EmptyList()
+    {
+        var countries = _countriesService.GetAllCountries();
+
+        Assert.Empty(countries);
+    }
+
+    [Fact]
+    public void GetAllCountries_AddFewCountries()
+    {
+        var countryRequestList = new List<CountryAddRequest>
+        {
+            new() { CountryName = "USA" }, new() { CountryName = "Japan" },
+            new() { CountryName = "Spain" }
+        };
+
+        var countriesListFromAddCountry = countryRequestList
+            .Select(countryRequest => _countriesService.AddCountry(countryRequest)).ToList();
+
+        var response = _countriesService.GetAllCountries();
+
+        Assert.Equal(countriesListFromAddCountry.Count, response.Count);
+        foreach (var expectedCountry in countriesListFromAddCountry) Assert.Contains(expectedCountry, response);
+
+        Assert.Equivalent(countriesListFromAddCountry, response);
+    }
+
+    #endregion
 }
