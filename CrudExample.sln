@@ -11,6 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceContracts", "Service
 		{9680A18F-41D9-4C16-838B-710F1FE18CC3} = {9680A18F-41D9-4C16-838B-710F1FE18CC3}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{51A631E6-1674-42F8-A810-530083E00B4E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{758E8A87-705D-4C36-90A1-03A8AB6B23CA} = {758E8A87-705D-4C36-90A1-03A8AB6B23CA}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,5 +38,9 @@ Global
 		{758E8A87-705D-4C36-90A1-03A8AB6B23CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{758E8A87-705D-4C36-90A1-03A8AB6B23CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{758E8A87-705D-4C36-90A1-03A8AB6B23CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51A631E6-1674-42F8-A810-530083E00B4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51A631E6-1674-42F8-A810-530083E00B4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51A631E6-1674-42F8-A810-530083E00B4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51A631E6-1674-42F8-A810-530083E00B4E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
