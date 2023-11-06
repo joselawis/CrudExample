@@ -20,6 +20,11 @@ public class CountryResponse
         return countryToCompare != null && CountryId == countryToCompare.CountryId &&
                CountryName == countryToCompare.CountryName;
     }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
 }
 
 public static class CountryExtensions
