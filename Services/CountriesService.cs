@@ -32,4 +32,11 @@ public class CountriesService : ICountriesService
     {
         return _countries.Select(c => c.ToCountryResponse()).ToList();
     }
+
+    public CountryResponse? GetCountryByCountryId(Guid? countryId)
+    {
+        return countryId == null
+            ? null
+            : _countries.FirstOrDefault(c => c?.CountryId == countryId, null)?.ToCountryResponse();
+    }
 }

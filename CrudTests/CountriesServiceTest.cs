@@ -8,6 +8,36 @@ public class CountriesServiceTest
 {
     private readonly ICountriesService _countriesService = new CountriesService();
 
+    #region GetCountryByCountryId
+
+    // If we supply null country Id then it should return null
+    [Fact]
+    public void GetCountryByCountryId_NullCountryId()
+    {
+        Guid? countryId = null;
+
+        var response = _countriesService.GetCountryByCountryId(countryId);
+
+        Assert.Null(response);
+    }
+
+    // If we supply a valid country Id then it should return the matching country details as CountryResponse object
+    [Fact]
+    public void GetCountryByCountryId_ValidCountryId()
+    {
+        var countryAddRequest = new CountryAddRequest
+        {
+            CountryName = "China"
+        };
+        var countryFromAdd = _countriesService.AddCountry(countryAddRequest);
+
+        var countryFromGet = _countriesService.GetCountryByCountryId(countryFromAdd.CountryId);
+
+        Assert.Equal(countryFromAdd, countryFromGet);
+    }
+
+    #endregion
+
     #region AddCountry
 
     // When CountryAddRequest is null, it should throw ArgumentNullException
