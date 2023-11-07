@@ -26,7 +26,7 @@ public class PersonsServiceTest
         {
             PersonName = null
         };
-        Assert.Throws<ArgumentNullException>(() => _personsService.AddPerson(personAddRequest));
+        Assert.Throws<ArgumentException>(() => _personsService.AddPerson(personAddRequest));
     }
 
     // When we supply proper person details, it should insert the person into the persons list; and it should return an object of PersonResponse, with newly generated PersonId
@@ -53,8 +53,8 @@ public class PersonsServiceTest
     }
 
     #endregion
-    
+
     #region GetAllPersons
-    
+
     #endregion
 }
