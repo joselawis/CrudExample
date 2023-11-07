@@ -29,6 +29,13 @@ public class PersonsService : IPersonsService
         return _persons.Select(ConvertPersonToPersonResponse).ToList();
     }
 
+    public PersonResponse? GetPersonByPersonId(Guid? personId)
+    {
+        if (personId == null) return null;
+        var person = _persons.FirstOrDefault(p => p.PersonId == personId);
+        return person == null ? null : ConvertPersonToPersonResponse(person);
+    }
+
     private PersonResponse ConvertPersonToPersonResponse(Person person)
     {
         var personResponse = person.ToPersonResponse();

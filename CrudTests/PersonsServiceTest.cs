@@ -7,7 +7,50 @@ namespace CrudTests;
 
 public class PersonsServiceTest
 {
+    private readonly ICountriesService _countriesService = new CountriesService();
     private readonly IPersonsService _personsService = new PersonsService();
+
+    #region GetPersonByPersonId
+
+    // If we supply null value as PersonId, it should return null as PersonResponse
+    [Fact]
+    public void GetPersonByPersonId_NullPersonId()
+    {
+        var personId = Guid.Empty;
+
+        var personResponse = _personsService.GetPersonByPersonId(personId);
+
+        Assert.Null(personResponse);
+    }
+
+    // If we supply a valid PersonId, it should return a PersonResponse
+    [Fact]
+    public void GetPersonByPersonId_ValidPersonId()
+    {
+        var countryAddRequest = new CountryAddRequest
+        {
+            CountryName = "CountryName"
+        };
+        var countryResponse = _countriesService.AddCountry(countryAddRequest);
+
+        var personAddRequest = new PersonAddRequest
+        {
+            PersonName = "PersonName",
+            Email = "person@example.com",
+            Address = "Address",
+            CountryId = countryResponse.CountryId,
+            DateOfBirth = DateTime.Now,
+            Gender = GenderOptions.Male,
+            ReceiveNewsLetters = true
+        };
+        var addPersonResponse = _personsService.AddPerson(personAddRequest);
+
+        var getPersonResponse = _personsService.GetPersonByPersonId(addPersonResponse.PersonId);
+
+        Assert.Equal(addPersonResponse, getPersonResponse);
+    }
+
+    #endregion
 
     #region AddPerson
 
@@ -55,6 +98,59 @@ public class PersonsServiceTest
     #endregion
 
     #region GetAllPersons
+
+    // The list of persons should be empty by default
+    [Fact]
+    public void GetAllPersons_EmptyList()
+    {
+        var persons = _personsService.GetAllPersons();
+
+        Assert.Empty(persons);
+    }
+
+    // First, we will add few Persons, then when we call GetAllPersons, it should return the list of Persons
+    [Fact]
+    public void GetAllPersons_AddFewPersons()
+    {
+        var countryAddRequest1 = new CountryAddRequest { CountryName = "CountryName1" };
+        var countryAddRequest2 = new CountryAddRequest { CountryName = "CountryName2" };
+        var countryAddRequest3 = new CountryAddRequest { CountryName = "CountryName3" };
+
+        var countryAddResponse1 = _countriesService.AddCountry(countryAddRequest1);
+        var countryAddResponse2 = _countriesService.AddCountry(countryAddRequest2);
+        var countryAddResponse3 = _countriesService.AddCountry(countryAddRequest3);
+
+        var personAddRequest1 = new PersonAddRequest
+        {
+            PersonName = "PersonName1", Email = "person@example.com", Address = "Address1",
+            CountryId = countryAddResponse1.CountryId, Gender = GenderOptions.Male, DateOfBirth = DateTime.Now,
+            ReceiveNewsLetters = true
+        };
+        var personAddRequest2 = new PersonAddRequest
+        {
+            PersonName = "PersonName2", Email = "person@example.com", Address = "Address2",
+            Gender = GenderOptions.Female, DateOfBirth = DateTime.Now, CountryId = countryAddResponse2.CountryId,
+            ReceiveNewsLetters = true
+        };
+        var personAddRequest3 = new PersonAddRequest
+        {
+            PersonName = "PersonName3", Email = "person@example.com", Address = "Address3",
+            Gender = GenderOptions.Male, DateOfBirth = DateTime.Now, CountryId = countryAddResponse3.CountryId,
+            ReceiveNewsLetters = true
+        };
+
+        var personsRequest = new List<PersonAddRequest>
+        {
+            personAddRequest1, personAddRequest2, personAddRequest3
+        };
+        var personsAddResponses = personsRequest.Select(p => _personsService.AddPerson(p)).ToList();
+
+        var personsFromGetAllPersons = _personsService.GetAllPersons();
+
+        Assert.Equal(3, personsFromGetAllPersons.Count);
+        Assert.Equal(personsAddResponses, personsFromGetAllPersons);
+        personsAddResponses.ForEach(p => Assert.Contains(p, personsFromGetAllPersons));
+    }
 
     #endregion
 }
