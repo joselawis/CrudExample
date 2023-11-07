@@ -43,43 +43,32 @@ public class PersonsService : IPersonsService
         var matchingPersons = allPersons;
         if (string.IsNullOrEmpty(searchString) || string.IsNullOrEmpty(searchBy)) return matchingPersons;
 
-        switch (searchBy)
+        matchingPersons = searchBy switch
         {
-            case nameof(Person.PersonName):
-                matchingPersons = allPersons.Where(p =>
+            nameof(Person.PersonName) => allPersons.Where(p =>
                     !string.IsNullOrEmpty(p.PersonName) &&
-                    p.PersonName.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
-                break;
-            case nameof(Person.Email):
-                matchingPersons = allPersons.Where(p =>
+                    p.PersonName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                .ToList(),
+            nameof(Person.Email) => allPersons.Where(p =>
                     !string.IsNullOrEmpty(p.Email) &&
-                    p.Email.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
-                break;
-            case nameof(Person.DateOfBirth):
-                matchingPersons = allPersons.Where(p =>
-                    p.DateOfBirth != null &&
-                    p.DateOfBirth.Value.ToString("dd MMM yyyy")
-                        .Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
-                break;
-            case nameof(Person.Gender):
-                matchingPersons = allPersons.Where(p =>
-                    p.Gender != null &&
-                    p.Gender.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
-                break;
-            case nameof(Person.CountryId):
-                matchingPersons = allPersons.Where(p =>
-                    p.CountryId != null &&
-                    p.CountryId.Value.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
-                break;
-            case nameof(Person.Address):
-                matchingPersons = allPersons.Where(p =>
-                    p.Address != null &&
-                    p.Address.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
-                break;
-            default:
-                matchingPersons = allPersons;
-                break;
-        }
+                    p.Email.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                .ToList(),
+            nameof(Person.DateOfBirth) => allPersons.Where(p =>
+                    p.DateOfBirth != null && p.DateOfBirth.Value.ToString("dd MMM yyyy")
+                        .Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                .ToList(),
+            nameof(Person.Gender) => allPersons.Where(p =>
+                    p.Gender != null && p.Gender.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                .ToList(),
+            nameof(Person.CountryId) => allPersons.Where(p =>
+                    p.CountryId != null && p.CountryId.Value.ToString()
+                        .Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                .ToList(),
+            nameof(Person.Address) => allPersons.Where(p =>
+                    p.Address != null && p.Address.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                .ToList(),
+            _ => allPersons
+        };
 
         return matchingPersons;
     }
