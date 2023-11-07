@@ -2,6 +2,7 @@ using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.DTO.Enums;
 using Services;
+using Xunit.Abstractions;
 
 namespace CrudTests;
 
@@ -9,6 +10,12 @@ public class PersonsServiceTest
 {
     private readonly ICountriesService _countriesService = new CountriesService();
     private readonly IPersonsService _personsService = new PersonsService();
+    private readonly ITestOutputHelper _testOutputHelper;
+
+    public PersonsServiceTest(ITestOutputHelper testOutputHelper)
+    {
+        _testOutputHelper = testOutputHelper;
+    }
 
     #region GetPersonByPersonId
 
@@ -145,7 +152,15 @@ public class PersonsServiceTest
         };
         var personsAddResponses = personsRequest.Select(p => _personsService.AddPerson(p)).ToList();
 
+        // Print expected
+        _testOutputHelper.WriteLine("Expected:");
+        personsAddResponses.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
+
         var personsFromGetAllPersons = _personsService.GetAllPersons();
+
+        // Print actual
+        _testOutputHelper.WriteLine("Actual:");
+        personsFromGetAllPersons.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
 
         Assert.Equal(3, personsFromGetAllPersons.Count);
         Assert.Equal(personsAddResponses, personsFromGetAllPersons);
