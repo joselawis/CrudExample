@@ -55,7 +55,7 @@ public class PersonResponse
                 CountryName}, Address: {Address}, ReceiveNewsLetters: {ReceiveNewsLetters}, Age: {Age}";
     }
 
-    private PersonUpdateRequest ToPersonUpdateRequest()
+    public PersonUpdateRequest ToPersonUpdateRequest()
     {
         return new PersonUpdateRequest
         {

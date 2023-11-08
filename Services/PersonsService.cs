@@ -95,7 +95,22 @@ public class PersonsService : IPersonsService
 
     public PersonResponse UpdatePerson(PersonUpdateRequest? personUpdateRequest)
     {
-        throw new NotImplementedException();
+        if (personUpdateRequest == null) throw new ArgumentNullException(nameof(personUpdateRequest));
+
+        ValidationHelper.ModelValidation(personUpdateRequest);
+
+        var matchingPerson = _persons.FirstOrDefault(p => p.PersonId == personUpdateRequest.PersonId);
+        if (matchingPerson == null) throw new ArgumentException("Person not found");
+
+        matchingPerson.PersonName = personUpdateRequest.PersonName;
+        matchingPerson.Email = personUpdateRequest.Email;
+        matchingPerson.DateOfBirth = personUpdateRequest.DateOfBirth;
+        matchingPerson.Gender = personUpdateRequest.Gender?.ToString();
+        matchingPerson.CountryId = personUpdateRequest.CountryId;
+        matchingPerson.Address = personUpdateRequest.Address;
+        matchingPerson.ReceiveNewsLetters = personUpdateRequest.ReceiveNewsLetters;
+
+        return matchingPerson.ToPersonResponse();
     }
 
     private static List<PersonResponse> ToSortedList(IEnumerable<PersonResponse> allPersons,

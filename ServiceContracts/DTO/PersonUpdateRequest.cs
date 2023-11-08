@@ -13,7 +13,7 @@ public class PersonUpdateRequest
     public Guid PersonId { get; init; }
 
     [Required(ErrorMessage = "Person name cannot be blank")]
-    public string? PersonName { get; init; }
+    public string? PersonName { get; set; }
 
     [Required(ErrorMessage = "Email cannot be blank")]
     [EmailAddress(ErrorMessage = "Please enter a valid email address")]

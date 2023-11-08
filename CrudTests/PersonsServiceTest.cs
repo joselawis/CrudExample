@@ -1,4 +1,3 @@
-using Entities;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.DTO.Enums;
@@ -82,6 +81,46 @@ public class PersonsServiceTest
         return allPersons;
     }
 
+    #region UpdatePerson
+
+    // When we supply null as PersonUpdateRequest, it should throw ArgumentNullException
+    [Fact]
+    public void UpdatePerson_NullPersonUpdateRequest()
+    {
+        Assert.Throws<ArgumentNullException>(() => _personsService.UpdatePerson(null));
+    }
+
+    // When we supply invalid person id, it should throw ArgumentException
+    [Fact]
+    public void UpdatePerson_InvalidPersonId()
+    {
+        var personUpdateRequest = new PersonUpdateRequest { PersonId = Guid.NewGuid() };
+        Assert.Throws<ArgumentException>(() => _personsService.UpdatePerson(personUpdateRequest));
+    }
+
+    // When PersonName is null, it should throw ArgumentException
+    [Fact]
+    public void UpdatePerson_NullPersonName()
+    {
+        var allPersons = AddDummyPersons();
+        var personUpdateRequest = allPersons[0].ToPersonUpdateRequest();
+        personUpdateRequest.PersonName = null;
+        Assert.Throws<ArgumentException>(() => _personsService.UpdatePerson(personUpdateRequest));
+    }
+
+    // When we supply a valid person update request, it should update the person
+    [Fact]
+    public void UpdatePerson_ValidPersonUpdateRequest()
+    {
+        var allPersons = AddDummyPersons();
+        var personUpdateRequest = allPersons[0].ToPersonUpdateRequest();
+        personUpdateRequest.PersonName = "Juanito";
+        var updatedPerson = _personsService.UpdatePerson(personUpdateRequest);
+        Assert.Equal(personUpdateRequest.PersonName, updatedPerson.PersonName);
+    }
+
+    #endregion
+
     #region GetFilteredPersons
 
     // If the search text is empty and search by is "PersonName", it should return all the persons
@@ -95,7 +134,7 @@ public class PersonsServiceTest
         allPersons.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
 
 
-        var personsFromFilteredSearch = _personsService.GetFilteredPersons(nameof(Person.PersonName), "");
+        var personsFromFilteredSearch = _personsService.GetFilteredPersons(nameof(PersonResponse.PersonName), "");
         // Print actual
         _testOutputHelper.WriteLine("Actual:");
         personsFromFilteredSearch.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
