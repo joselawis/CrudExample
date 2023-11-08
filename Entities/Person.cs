@@ -6,11 +6,11 @@ namespace Entities;
 public class Person
 {
     public Guid PersonId { get; set; }
-    public string? PersonName { get; set; }
-    public string? Email { get; set; }
-    public DateTime? DateOfBirth { get; set; }
-    public string? Gender { get; set; }
-    public Guid? CountryId { get; set; }
-    public string? Address { get; set; }
-    public bool ReceiveNewsLetters { get; set; }
+    public string? PersonName { get; init; }
+    public string? Email { get; init; }
+    public DateTime? DateOfBirth { get; init; }
+    public string? Gender { get; init; }
+    public Guid? CountryId { get; init; }
+    public string? Address { get; init; }
+    public bool ReceiveNewsLetters { get; init; }
 }

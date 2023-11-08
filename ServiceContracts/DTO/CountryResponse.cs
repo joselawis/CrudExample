@@ -7,8 +7,8 @@ namespace ServiceContracts.DTO;
 /// </summary>
 public class CountryResponse
 {
-    public Guid CountryId { get; set; }
-    public string? CountryName { get; set; }
+    public Guid CountryId { get; init; }
+    public string? CountryName { get; init; }
 
     public override bool Equals(object? obj)
     {

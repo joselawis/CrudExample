@@ -10,20 +10,20 @@ namespace ServiceContracts.DTO;
 public class PersonUpdateRequest
 {
     [Required(ErrorMessage = "Person id must be provided")]
-    public Guid PersonId { get; set; }
+    public Guid PersonId { get; init; }
 
     [Required(ErrorMessage = "Person name cannot be blank")]
-    public string? PersonName { get; set; }
+    public string? PersonName { get; init; }
 
     [Required(ErrorMessage = "Email cannot be blank")]
     [EmailAddress(ErrorMessage = "Please enter a valid email address")]
-    public string? Email { get; set; }
+    public string? Email { get; init; }
 
-    public DateTime? DateOfBirth { get; set; }
-    public GenderOptions? Gender { get; set; }
-    public Guid? CountryId { get; set; }
-    public string? Address { get; set; }
-    public bool ReceiveNewsLetters { get; set; }
+    public DateTime? DateOfBirth { get; init; }
+    public GenderOptions? Gender { get; init; }
+    public Guid? CountryId { get; init; }
+    public string? Address { get; init; }
+    public bool ReceiveNewsLetters { get; init; }
 
     /// <summary>
     ///     Converts the current object of PersonAddRequest to a Person object
