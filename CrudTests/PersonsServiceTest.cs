@@ -33,7 +33,7 @@ public class PersonsServiceTest
 
 
         var personsSorted =
-            _personsService.GetSortedPersons(allPersons, nameof(Person.PersonName), SortOrderOptions.DESC);
+            _personsService.GetSortedPersons(allPersons, nameof(PersonResponse.PersonName), SortOrderOptions.DESC);
         // Print actual
         _testOutputHelper.WriteLine("Actual:");
         personsSorted.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
@@ -115,8 +115,7 @@ public class PersonsServiceTest
         _testOutputHelper.WriteLine("Expected:");
         allPersons.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
 
-
-        var personsFromFilteredSearch = _personsService.GetFilteredPersons(nameof(Person.PersonName), "ma");
+        var personsFromFilteredSearch = _personsService.GetFilteredPersons(nameof(PersonResponse.PersonName), "ma");
         // Print actual
         _testOutputHelper.WriteLine("Actual:");
         personsFromFilteredSearch.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));

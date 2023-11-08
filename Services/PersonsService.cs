@@ -46,26 +46,26 @@ public class PersonsService : IPersonsService
 
         matchingPersons = searchBy switch
         {
-            nameof(Person.PersonName) => allPersons.Where(p =>
+            nameof(PersonResponse.PersonName) => allPersons.Where(p =>
                     !string.IsNullOrEmpty(p.PersonName) &&
                     p.PersonName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
                 .ToList(),
-            nameof(Person.Email) => allPersons.Where(p =>
+            nameof(PersonResponse.Email) => allPersons.Where(p =>
                     !string.IsNullOrEmpty(p.Email) &&
                     p.Email.Contains(searchString, StringComparison.OrdinalIgnoreCase))
                 .ToList(),
-            nameof(Person.DateOfBirth) => allPersons.Where(p =>
+            nameof(PersonResponse.DateOfBirth) => allPersons.Where(p =>
                     p.DateOfBirth != null && p.DateOfBirth.Value.ToString("dd MMM yyyy")
                         .Contains(searchString, StringComparison.OrdinalIgnoreCase))
                 .ToList(),
-            nameof(Person.Gender) => allPersons.Where(p =>
+            nameof(PersonResponse.Gender) => allPersons.Where(p =>
                     p.Gender != null && p.Gender.Contains(searchString, StringComparison.OrdinalIgnoreCase))
                 .ToList(),
-            nameof(Person.CountryId) => allPersons.Where(p =>
-                    p.CountryId != null && p.CountryId.Value.ToString()
+            nameof(PersonResponse.CountryName) => allPersons.Where(p =>
+                    p.CountryName != null && p.CountryName.ToString()
                         .Contains(searchString, StringComparison.OrdinalIgnoreCase))
                 .ToList(),
-            nameof(Person.Address) => allPersons.Where(p =>
+            nameof(PersonResponse.Address) => allPersons.Where(p =>
                     p.Address != null && p.Address.Contains(searchString, StringComparison.OrdinalIgnoreCase))
                 .ToList(),
             _ => allPersons
@@ -77,7 +77,28 @@ public class PersonsService : IPersonsService
     public List<PersonResponse> GetSortedPersons(List<PersonResponse> allPersons, string sortBy,
         SortOrderOptions sortOrder)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrEmpty(sortBy)) return allPersons;
+
+        var sortedPersons = sortBy switch
+        {
+            nameof(PersonResponse.PersonName) => ToSortedList(allPersons, p => p.PersonName, sortOrder),
+            nameof(PersonResponse.Email) => ToSortedList(allPersons, p => p.Email, sortOrder),
+            nameof(PersonResponse.DateOfBirth) => ToSortedList(allPersons, p => p.DateOfBirth, sortOrder),
+            nameof(PersonResponse.Gender) => ToSortedList(allPersons, p => p.Gender, sortOrder),
+            nameof(PersonResponse.CountryName) => ToSortedList(allPersons, p => p.CountryName, sortOrder),
+            nameof(PersonResponse.Address) => ToSortedList(allPersons, p => p.Address, sortOrder),
+            _ => allPersons
+        };
+
+        return sortedPersons;
+    }
+
+    private static List<PersonResponse> ToSortedList(IEnumerable<PersonResponse> allPersons,
+        Func<PersonResponse, object?> keySelector, SortOrderOptions sortOrder)
+    {
+        return (sortOrder.Equals(SortOrderOptions.ASC)
+            ? allPersons.OrderBy(keySelector)
+            : allPersons.OrderByDescending(keySelector)).ToList();
     }
 
     private PersonResponse ConvertPersonToPersonResponse(Person person)
