@@ -93,6 +93,11 @@ public class PersonsService : IPersonsService
         return sortedPersons;
     }
 
+    public PersonResponse UpdatePerson(PersonUpdateRequest? personUpdateRequest)
+    {
+        throw new NotImplementedException();
+    }
+
     private static List<PersonResponse> ToSortedList(IEnumerable<PersonResponse> allPersons,
         Func<PersonResponse, object?> keySelector, SortOrderOptions sortOrder)
     {

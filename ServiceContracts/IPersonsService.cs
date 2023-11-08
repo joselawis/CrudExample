@@ -44,4 +44,6 @@ public interface IPersonsService
     /// <param name="sortOrder">ASC or DESC</param>
     /// <returns>Return sorted person as PersonResponse list</returns>
     List<PersonResponse> GetSortedPersons(List<PersonResponse> allPersons, string sortBy, SortOrderOptions sortOrder);
+
+    PersonResponse UpdatePerson(PersonUpdateRequest? personUpdateRequest);
 }
