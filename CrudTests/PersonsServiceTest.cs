@@ -18,67 +18,38 @@ public class PersonsServiceTest
         _testOutputHelper = testOutputHelper;
     }
 
-    #region GetFilteredPersons
+    #region GetSortedPersons
 
-    // If the search text is empty and search by is "PersonName", it should return all the persons
+    // When we sort based on PersonName in DESC, it should return persons list in descending order
     [Fact]
-    public void GetFilteredPersons_EmptySearchText()
+    public void GetSortedPersons()
     {
-        var countryAddRequest1 = new CountryAddRequest { CountryName = "CountryName1" };
-        var countryAddRequest2 = new CountryAddRequest { CountryName = "CountryName2" };
-        var countryAddRequest3 = new CountryAddRequest { CountryName = "CountryName3" };
-
-        var countryAddResponse1 = _countriesService.AddCountry(countryAddRequest1);
-        var countryAddResponse2 = _countriesService.AddCountry(countryAddRequest2);
-        var countryAddResponse3 = _countriesService.AddCountry(countryAddRequest3);
-
-        var personAddRequest1 = new PersonAddRequest
-        {
-            PersonName = "PersonName1", Email = "person@example.com", Address = "Address1",
-            CountryId = countryAddResponse1.CountryId, Gender = GenderOptions.Male, DateOfBirth = DateTime.Now,
-            ReceiveNewsLetters = true
-        };
-        var personAddRequest2 = new PersonAddRequest
-        {
-            PersonName = "PersonName2", Email = "person@example.com", Address = "Address2",
-            Gender = GenderOptions.Female, DateOfBirth = DateTime.Now, CountryId = countryAddResponse2.CountryId,
-            ReceiveNewsLetters = true
-        };
-        var personAddRequest3 = new PersonAddRequest
-        {
-            PersonName = "PersonName3", Email = "person@example.com", Address = "Address3",
-            Gender = GenderOptions.Male, DateOfBirth = DateTime.Now, CountryId = countryAddResponse3.CountryId,
-            ReceiveNewsLetters = true
-        };
-
-        var personsRequest = new List<PersonAddRequest>
-        {
-            personAddRequest1, personAddRequest2, personAddRequest3
-        };
-        var personsAddResponses = personsRequest.Select(p => _personsService.AddPerson(p)).ToList();
+        var allPersons = AddDummyPersons();
+        var sortedAllPersons = allPersons.OrderByDescending(p => p.PersonName).ToList();
 
         // Print expected
         _testOutputHelper.WriteLine("Expected:");
-        personsAddResponses.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
+        allPersons.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
 
 
-        var personsFromFilteredSearch = _personsService.GetFilteredPersons(nameof(Person.PersonName), "");
+        var personsSorted =
+            _personsService.GetSortedPersons(allPersons, nameof(Person.PersonName), SortOrderOptions.DESC);
         // Print actual
         _testOutputHelper.WriteLine("Actual:");
-        personsFromFilteredSearch.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
+        personsSorted.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
 
-        Assert.Equal(3, personsFromFilteredSearch.Count);
-        Assert.Equal(personsAddResponses, personsFromFilteredSearch);
-        personsAddResponses.ForEach(p => Assert.Contains(p, personsFromFilteredSearch));
+        Assert.Equal(3, personsSorted.Count);
+        Assert.True(sortedAllPersons.Zip(personsSorted, (a, b) => a.Equals(b)).All(match => match));
+        Assert.Equal(sortedAllPersons, personsSorted);
     }
 
-    // First we will add few persons, then we will search based on person name with some search string. It should return the matching persons.
-    [Fact]
-    public void GetFilteredPersons_SearchByPersonName()
+    #endregion
+
+    private List<PersonResponse> AddDummyPersons()
     {
-        var countryAddRequest1 = new CountryAddRequest { CountryName = "CountryName1" };
-        var countryAddRequest2 = new CountryAddRequest { CountryName = "CountryName2" };
-        var countryAddRequest3 = new CountryAddRequest { CountryName = "CountryName3" };
+        var countryAddRequest1 = new CountryAddRequest { CountryName = "USA" };
+        var countryAddRequest2 = new CountryAddRequest { CountryName = "España" };
+        var countryAddRequest3 = new CountryAddRequest { CountryName = "India" };
 
         var countryAddResponse1 = _countriesService.AddCountry(countryAddRequest1);
         var countryAddResponse2 = _countriesService.AddCountry(countryAddRequest2);
@@ -92,13 +63,13 @@ public class PersonsServiceTest
         };
         var personAddRequest2 = new PersonAddRequest
         {
-            PersonName = "Mary", Email = "person@example.com", Address = "Address2",
+            PersonName = "Maria", Email = "person@example.com", Address = "Address2",
             Gender = GenderOptions.Female, DateOfBirth = DateTime.Now, CountryId = countryAddResponse2.CountryId,
             ReceiveNewsLetters = true
         };
         var personAddRequest3 = new PersonAddRequest
         {
-            PersonName = "Josema", Email = "person@example.com", Address = "Address3",
+            PersonName = "Mario", Email = "person@example.com", Address = "Address3",
             Gender = GenderOptions.Male, DateOfBirth = DateTime.Now, CountryId = countryAddResponse3.CountryId,
             ReceiveNewsLetters = true
         };
@@ -107,11 +78,42 @@ public class PersonsServiceTest
         {
             personAddRequest1, personAddRequest2, personAddRequest3
         };
-        var personsAddResponses = personsRequest.Select(p => _personsService.AddPerson(p)).ToList();
+        var allPersons = personsRequest.Select(p => _personsService.AddPerson(p)).ToList();
+        return allPersons;
+    }
+
+    #region GetFilteredPersons
+
+    // If the search text is empty and search by is "PersonName", it should return all the persons
+    [Fact]
+    public void GetFilteredPersons_EmptySearchText()
+    {
+        var allPersons = AddDummyPersons();
 
         // Print expected
         _testOutputHelper.WriteLine("Expected:");
-        personsAddResponses.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
+        allPersons.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
+
+
+        var personsFromFilteredSearch = _personsService.GetFilteredPersons(nameof(Person.PersonName), "");
+        // Print actual
+        _testOutputHelper.WriteLine("Actual:");
+        personsFromFilteredSearch.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
+
+        Assert.Equal(3, personsFromFilteredSearch.Count);
+        Assert.Equal(allPersons, personsFromFilteredSearch);
+        allPersons.ForEach(p => Assert.Contains(p, personsFromFilteredSearch));
+    }
+
+    // First we will add few persons, then we will search based on person name with some search string. It should return the matching persons.
+    [Fact]
+    public void GetFilteredPersons_SearchByPersonName()
+    {
+        var allPersons = AddDummyPersons();
+
+        // Print expected
+        _testOutputHelper.WriteLine("Expected:");
+        allPersons.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
 
 
         var personsFromFilteredSearch = _personsService.GetFilteredPersons(nameof(Person.PersonName), "ma");
@@ -120,7 +122,7 @@ public class PersonsServiceTest
         personsFromFilteredSearch.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
 
         Assert.Equal(2, personsFromFilteredSearch.Count);
-        personsAddResponses.FindAll(p => p.PersonName != null && p.PersonName.Contains("ma"))
+        allPersons.FindAll(p => p.PersonName != null && p.PersonName.Contains("ma"))
             .ForEach(p => Assert.Contains(p, personsFromFilteredSearch));
     }
 
@@ -228,42 +230,11 @@ public class PersonsServiceTest
     [Fact]
     public void GetAllPersons_AddFewPersons()
     {
-        var countryAddRequest1 = new CountryAddRequest { CountryName = "CountryName1" };
-        var countryAddRequest2 = new CountryAddRequest { CountryName = "CountryName2" };
-        var countryAddRequest3 = new CountryAddRequest { CountryName = "CountryName3" };
-
-        var countryAddResponse1 = _countriesService.AddCountry(countryAddRequest1);
-        var countryAddResponse2 = _countriesService.AddCountry(countryAddRequest2);
-        var countryAddResponse3 = _countriesService.AddCountry(countryAddRequest3);
-
-        var personAddRequest1 = new PersonAddRequest
-        {
-            PersonName = "PersonName1", Email = "person@example.com", Address = "Address1",
-            CountryId = countryAddResponse1.CountryId, Gender = GenderOptions.Male, DateOfBirth = DateTime.Now,
-            ReceiveNewsLetters = true
-        };
-        var personAddRequest2 = new PersonAddRequest
-        {
-            PersonName = "PersonName2", Email = "person@example.com", Address = "Address2",
-            Gender = GenderOptions.Female, DateOfBirth = DateTime.Now, CountryId = countryAddResponse2.CountryId,
-            ReceiveNewsLetters = true
-        };
-        var personAddRequest3 = new PersonAddRequest
-        {
-            PersonName = "PersonName3", Email = "person@example.com", Address = "Address3",
-            Gender = GenderOptions.Male, DateOfBirth = DateTime.Now, CountryId = countryAddResponse3.CountryId,
-            ReceiveNewsLetters = true
-        };
-
-        var personsRequest = new List<PersonAddRequest>
-        {
-            personAddRequest1, personAddRequest2, personAddRequest3
-        };
-        var personsAddResponses = personsRequest.Select(p => _personsService.AddPerson(p)).ToList();
+        var allPersons = AddDummyPersons();
 
         // Print expected
         _testOutputHelper.WriteLine("Expected:");
-        personsAddResponses.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
+        allPersons.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
 
         var personsFromGetAllPersons = _personsService.GetAllPersons();
 
@@ -272,8 +243,8 @@ public class PersonsServiceTest
         personsFromGetAllPersons.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
 
         Assert.Equal(3, personsFromGetAllPersons.Count);
-        Assert.Equal(personsAddResponses, personsFromGetAllPersons);
-        personsAddResponses.ForEach(p => Assert.Contains(p, personsFromGetAllPersons));
+        Assert.Equal(allPersons, personsFromGetAllPersons);
+        allPersons.ForEach(p => Assert.Contains(p, personsFromGetAllPersons));
     }
 
     #endregion
