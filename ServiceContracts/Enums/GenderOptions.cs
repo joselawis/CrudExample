@@ -1,4 +1,4 @@
-namespace ServiceContracts.DTO.Enums;
+namespace ServiceContracts.Enums;
 
 public enum GenderOptions
 {

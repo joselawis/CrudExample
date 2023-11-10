@@ -1,7 +1,7 @@
 using Entities;
 using ServiceContracts;
 using ServiceContracts.DTO;
-using ServiceContracts.DTO.Enums;
+using ServiceContracts.Enums;
 using Services.Helpers;
 
 namespace Services;
@@ -123,7 +123,7 @@ public class PersonsService : IPersonsService
     private static List<PersonResponse> ToSortedList(IEnumerable<PersonResponse> allPersons,
         Func<PersonResponse, object?> keySelector, SortOrderOptions sortOrder)
     {
-        return (sortOrder.Equals(SortOrderOptions.ASC)
+        return (sortOrder.Equals(SortOrderOptions.Asc)
             ? allPersons.OrderBy(keySelector)
             : allPersons.OrderByDescending(keySelector)).ToList();
     }

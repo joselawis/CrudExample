@@ -1,6 +1,6 @@
 using ServiceContracts;
 using ServiceContracts.DTO;
-using ServiceContracts.DTO.Enums;
+using ServiceContracts.Enums;
 using Services;
 using Xunit.Abstractions;
 
@@ -32,7 +32,7 @@ public class PersonsServiceTest
 
 
         var personsSorted =
-            _personsService.GetSortedPersons(allPersons, nameof(PersonResponse.PersonName), SortOrderOptions.DESC);
+            _personsService.GetSortedPersons(allPersons, nameof(PersonResponse.PersonName), SortOrderOptions.Desc);
         // Print actual
         _testOutputHelper.WriteLine("Actual:");
         personsSorted.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));

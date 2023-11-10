@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Entities;
-using ServiceContracts.DTO.Enums;
+using ServiceContracts.Enums;
 
 namespace ServiceContracts.DTO;
 
