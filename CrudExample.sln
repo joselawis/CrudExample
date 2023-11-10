@@ -1,6 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudExample", "CrudExample\CrudExample.csproj", "{7DBB9B50-E268-4DB7-BDDA-A5E823467250}"
+	ProjectSection(ProjectDependencies) = postProject
+		{758E8A87-705D-4C36-90A1-03A8AB6B23CA} = {758E8A87-705D-4C36-90A1-03A8AB6B23CA}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudTests", "CrudTests\CrudTests.csproj", "{3CE41824-C6B8-46C6-8792-F0CC40E3290A}"
 EndProject
