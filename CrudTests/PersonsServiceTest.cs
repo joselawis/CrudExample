@@ -286,4 +286,36 @@ public class PersonsServiceTest
     }
 
     #endregion
+
+    #region DeletePerson
+
+    // If you supply an invalid PersonId, it should return false
+    [Fact]
+    public void DeletePerson_InvalidPersonId()
+    {
+        var result = _personsService.DeletePerson(Guid.NewGuid());
+
+        Assert.False(result);
+    }
+
+    // If you supply a null personId, it should throw ArgumentNullException
+    [Fact]
+    public void DeletePerson_PersonIdIsNull()
+    {
+        Assert.Throws<ArgumentNullException>(() => _personsService.DeletePerson(null));
+    }
+
+    // If you supply a valid PersonId, it should return true
+    [Fact]
+    public void DeletePerson_ValidPersonId()
+    {
+        var allPersons = AddDummyPersons();
+        var personId = allPersons[0].PersonId;
+
+        var result = _personsService.DeletePerson(personId);
+
+        Assert.True(result);
+    }
+
+    #endregion
 }

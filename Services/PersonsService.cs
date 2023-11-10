@@ -113,6 +113,13 @@ public class PersonsService : IPersonsService
         return matchingPerson.ToPersonResponse();
     }
 
+    public bool DeletePerson(Guid? personId)
+    {
+        if (personId == null) throw new ArgumentNullException(nameof(personId));
+        var removed = _persons.RemoveAll(p => p.PersonId == personId);
+        return removed > 0;
+    }
+
     private static List<PersonResponse> ToSortedList(IEnumerable<PersonResponse> allPersons,
         Func<PersonResponse, object?> keySelector, SortOrderOptions sortOrder)
     {
