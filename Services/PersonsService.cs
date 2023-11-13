@@ -145,9 +145,9 @@ public class PersonsService : IPersonsService
                         .Contains(searchString, StringComparison.OrdinalIgnoreCase))
                 .ToList(),
             nameof(PersonResponse.Gender) => allPersons.Where(p =>
-                    p.Gender != null && p.Gender.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                    p.Gender != null && p.Gender.Equals(searchString, StringComparison.OrdinalIgnoreCase))
                 .ToList(),
-            nameof(PersonResponse.CountryName) => allPersons.Where(p =>
+            nameof(PersonResponse.CountryId) => allPersons.Where(p =>
                     p.CountryName != null && p.CountryName.ToString()
                         .Contains(searchString, StringComparison.OrdinalIgnoreCase))
                 .ToList(),
