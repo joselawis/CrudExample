@@ -6,7 +6,7 @@ namespace CrudTests;
 
 public class CountriesServiceTest
 {
-    private readonly ICountriesService _countriesService = new CountriesService();
+    private readonly ICountriesService _countriesService = new CountriesService(false);
 
     #region GetCountryByCountryId
 

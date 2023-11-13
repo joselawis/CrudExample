@@ -8,8 +8,8 @@ namespace CrudTests;
 
 public class PersonsServiceTest
 {
-    private readonly ICountriesService _countriesService = new CountriesService();
-    private readonly IPersonsService _personsService = new PersonsService();
+    private readonly ICountriesService _countriesService = new CountriesService(false);
+    private readonly IPersonsService _personsService = new PersonsService(false);
     private readonly ITestOutputHelper _testOutputHelper;
 
     public PersonsServiceTest(ITestOutputHelper testOutputHelper)
