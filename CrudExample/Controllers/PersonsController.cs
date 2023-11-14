@@ -5,16 +5,19 @@ using ServiceContracts.Enums;
 
 namespace CrudExample.Controllers;
 
+[Route("persons")]
 public class PersonsController : Controller
 {
+    private readonly ICountriesService _countriesService;
     private readonly IPersonsService _personsService;
 
-    public PersonsController(IPersonsService personsService)
+    public PersonsController(IPersonsService personsService, ICountriesService countriesService)
     {
         _personsService = personsService;
+        _countriesService = countriesService;
     }
 
-    [Route("persons/index")]
+    [Route("index")]
     [Route("/")]
     public IActionResult Index(string searchBy, string? searchString,
         string sortBy = nameof(PersonResponse.PersonName), SortOrderOptions sortOrder = SortOrderOptions.Asc)
@@ -39,5 +42,15 @@ public class PersonsController : Controller
         ViewBag.CurrentSortOrder = sortOrder;
 
         return View(sortedPersons);
+    }
+
+    [Route("create")]
+    [HttpGet]
+    public IActionResult Create()
+    {
+        var countries = _countriesService.GetAllCountries();
+        ViewBag.Countries = countries;
+
+        return View();
     }
 }
