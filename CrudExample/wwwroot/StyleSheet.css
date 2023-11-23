@@ -211,6 +211,7 @@ body {
 .list > li {
     padding: 8px 12px;
     background-color: #ffffff;
+
     margin: 3px 2px;
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
@@ -251,7 +252,7 @@ body {
 }
 
 .flex > div {
-    padding: 15px;
+    padding: 4px !important;
 }
 
 .flex-1 {
@@ -350,6 +351,26 @@ a.link-hover:hover {
     display: inline-block;
 }
 
+.center-box {
+    margin: auto;
+    width: 90%;
+}
+
+.form-field > div:first-child {
+    flex: 1;
+    width: auto;
+}
+
+.form-field > div:nth-child(2) {
+    flex: 1;
+    width: auto;
+}
+
+.form-field {
+    flex-direction: column;
+    margin-bottom: 6px;
+}
+
 
 @media screen and (min-width: 1000px) {
     .navbar-brand {
@@ -365,5 +386,26 @@ a.link-hover:hover {
     .navbar > ul > li {
         display: inline-block;
         width: auto;
+    }
+
+    .center-box {
+        width: 70%;
+        margin: auto;
+    }
+
+    .form-field > div {
+        padding: 15px !important;
+    }
+
+    .form-field > div:first-child {
+        flex: 1 !important;
+    }
+
+    .form-field > div:nth-child(2) {
+        flex: 3 !important;
+    }
+
+    .form-field {
+        flex-direction: row;
     }
 }
