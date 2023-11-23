@@ -93,10 +93,32 @@ public class PersonsController : Controller
         {
             ProvideCountries();
             ProvideErrors();
-            return View();
+            return View(personResponse.ToPersonUpdateRequest());
         }
 
         _personsService.UpdatePerson(personUpdateRequest);
+
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet]
+    [Route("{personId:guid}")]
+    public IActionResult Delete(Guid? personId)
+    {
+        var personResponse = _personsService.GetPersonByPersonId(personId);
+        if (personResponse == null) return RedirectToAction("Index");
+
+        return View(personResponse);
+    }
+
+    [HttpPost]
+    [Route("{personId:guid}")]
+    public IActionResult Delete(Guid? personId, PersonUpdateRequest personUpdateRequest)
+    {
+        var personResponse = _personsService.GetPersonByPersonId(personUpdateRequest.PersonId);
+        if (personResponse == null) return RedirectToAction("Index");
+
+        _personsService.DeletePerson(personResponse.PersonId);
 
         return RedirectToAction("Index");
     }
