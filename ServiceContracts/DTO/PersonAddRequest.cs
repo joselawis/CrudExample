@@ -38,7 +38,7 @@ public class PersonAddRequest
         {
             PersonName = PersonName,
             Email = Email,
-            DateOfBirth = DateOfBirth,
+            DateOfBirth = DateOfBirth?.SetKindUtc(),
             Gender = Gender.ToString(),
             CountryId = CountryId,
             Address = Address,

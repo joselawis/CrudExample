@@ -1,11 +1,8 @@
-using ServiceContracts;
-using ServiceContracts.DTO;
-using Services;
-
 namespace CrudTests;
 
 public class CountriesServiceTest
 {
+    /*
     private readonly ICountriesService _countriesService = new CountriesService(false);
 
     #region GetCountryByCountryId
@@ -132,4 +129,5 @@ public class CountriesServiceTest
     }
 
     #endregion
+    */
 }

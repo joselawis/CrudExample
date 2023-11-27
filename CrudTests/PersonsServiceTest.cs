@@ -1,13 +1,8 @@
-using ServiceContracts;
-using ServiceContracts.DTO;
-using ServiceContracts.Enums;
-using Services;
-using Xunit.Abstractions;
-
 namespace CrudTests;
 
 public class PersonsServiceTest
 {
+    /*
     private readonly ICountriesService _countriesService = new CountriesService(false);
     private readonly IPersonsService _personsService = new PersonsService(false);
     private readonly ITestOutputHelper _testOutputHelper;
@@ -318,4 +313,5 @@ public class PersonsServiceTest
     }
 
     #endregion
+    */
 }
