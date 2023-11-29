@@ -6,7 +6,7 @@ using ServiceContracts.Enums;
 
 namespace CrudExample.Controllers;
 
-[Route("[controller]/[action]/")]
+[Route("[controller]/[action]")]
 public class PersonsController : Controller
 {
     private readonly ICountriesService _countriesService;
@@ -19,6 +19,7 @@ public class PersonsController : Controller
     }
 
     [Route("/")]
+    [Route("")]
     public IActionResult Index(string searchBy, string? searchString,
         string sortBy = nameof(PersonResponse.PersonName), SortOrderOptions sortOrder = SortOrderOptions.Asc)
     {
@@ -45,6 +46,7 @@ public class PersonsController : Controller
     }
 
     [HttpGet]
+    [Route("")]
     public IActionResult Create()
     {
         ProvideCountries();
@@ -54,6 +56,7 @@ public class PersonsController : Controller
 
 
     [HttpPost]
+    [Route("")]
     public IActionResult Create(PersonAddRequest request)
     {
         if (!ModelState.IsValid)
