@@ -1,9 +1,15 @@
+using Entities;
+using Microsoft.EntityFrameworkCore;
+using ServiceContracts;
+using ServiceContracts.DTO;
+using Services;
+
 namespace CrudTests;
 
 public class CountriesServiceTest
 {
-    /*
-    private readonly ICountriesService _countriesService = new CountriesService(false);
+    private readonly ICountriesService _countriesService = new CountriesService(
+        new PersonsDbContext(new DbContextOptionsBuilder<PersonsDbContext>().Options));
 
     #region GetCountryByCountryId
 
@@ -129,5 +135,4 @@ public class CountriesServiceTest
     }
 
     #endregion
-    */
 }

@@ -1,14 +1,26 @@
+using Entities;
+using Microsoft.EntityFrameworkCore;
+using ServiceContracts;
+using ServiceContracts.DTO;
+using ServiceContracts.Enums;
+using Services;
+using Xunit.Abstractions;
+
 namespace CrudTests;
 
 public class PersonsServiceTest
 {
-    /*
-    private readonly ICountriesService _countriesService = new CountriesService(false);
-    private readonly IPersonsService _personsService = new PersonsService(false);
+    private readonly ICountriesService _countriesService;
+    private readonly IPersonsService _personsService;
     private readonly ITestOutputHelper _testOutputHelper;
 
     public PersonsServiceTest(ITestOutputHelper testOutputHelper)
     {
+        _countriesService = new CountriesService(
+            new PersonsDbContext(new DbContextOptionsBuilder<PersonsDbContext>().Options));
+        _personsService =
+            new PersonsService(new PersonsDbContext(new DbContextOptionsBuilder<PersonsDbContext>().Options),
+                _countriesService);
         _testOutputHelper = testOutputHelper;
     }
 
@@ -313,5 +325,4 @@ public class PersonsServiceTest
     }
 
     #endregion
-    */
 }
