@@ -16,7 +16,7 @@ namespace Entities.Migrations
                         PersonId UUID,
                         PersonName VARCHAR(255),
                         Email VARCHAR(255),
-                        DateOfBirth timestamp with time zone,
+                        DateOfBirth date,
                         Gender VARCHAR(10),
                         CountryId UUID,
                         Address VARCHAR(255),

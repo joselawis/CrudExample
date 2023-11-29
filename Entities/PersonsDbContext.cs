@@ -1,5 +1,7 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using NpgsqlTypes;
 
 namespace Entities;
 
@@ -38,5 +40,24 @@ public class PersonsDbContext : DbContext
     public IEnumerable<Person> sp_GetAllPersons()
     {
         return Persons.FromSqlRaw("SELECT * FROM get_all_persons()").ToList();
+    }
+
+    public int sp_InsertPerson(Person person)
+    {
+        NpgsqlParameter[] parameters =
+        {
+            new("@PersonId", NpgsqlDbType.Uuid) { Value = person.PersonId },
+            new("@PersonName", NpgsqlDbType.Varchar) { Value = person.PersonName },
+            new("@Email", NpgsqlDbType.Varchar) { Value = person.Email },
+            new("@DateOfBirth", NpgsqlDbType.Date) { Value = person.DateOfBirth ?? (object)DBNull.Value },
+            new("@Gender", NpgsqlDbType.Varchar) { Value = person.Gender },
+            new("@CountryId", NpgsqlDbType.Uuid) { Value = person.CountryId },
+            new("@Address", NpgsqlDbType.Varchar) { Value = person.Address },
+            new("@ReceiveNewsLetters", NpgsqlDbType.Boolean) { Value = person.ReceiveNewsLetters }
+        };
+
+        return Database.ExecuteSqlRaw(
+            "SELECT insert_person(@PersonId, @PersonName, @Email, @DateOfBirth, @Gender, @CountryId, @Address, @ReceiveNewsLetters)",
+            parameters);
     }
 }

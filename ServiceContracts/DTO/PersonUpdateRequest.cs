@@ -36,7 +36,7 @@ public class PersonUpdateRequest
             PersonId = PersonId,
             PersonName = PersonName,
             Email = Email,
-            DateOfBirth = DateOfBirth?.SetKindUtc(),
+            DateOfBirth = DateOfBirth,
             Gender = Gender.ToString(),
             CountryId = CountryId,
             Address = Address,

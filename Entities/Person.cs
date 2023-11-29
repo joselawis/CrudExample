@@ -14,8 +14,7 @@ public class Person
 
     [StringLength(40)] public string? Email { get; set; }
 
-    [Column(TypeName = "timestamp with time zone")]
-    public DateTime? DateOfBirth { get; set; }
+    [Column(TypeName = "date")] public DateTime? DateOfBirth { get; set; }
 
     [StringLength(6)] public string? Gender { get; set; }
 
@@ -24,17 +23,4 @@ public class Person
     [StringLength(200)] public string? Address { get; set; }
 
     public bool ReceiveNewsLetters { get; set; }
-}
-
-public static class DateTimeExtensions
-{
-    public static DateTime? SetKindUtc(this DateTime? dateTime)
-    {
-        return dateTime?.SetKindUtc();
-    }
-
-    public static DateTime SetKindUtc(this DateTime dateTime)
-    {
-        return dateTime.Kind == DateTimeKind.Utc ? dateTime : DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
-    }
 }
