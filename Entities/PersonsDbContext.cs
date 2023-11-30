@@ -35,6 +35,17 @@ public class PersonsDbContext : DbContext
         if (persons != null)
             foreach (var person in persons)
                 modelBuilder.Entity<Person>().HasData(person);
+
+        // Fluent API
+        modelBuilder.Entity<Person>().Property(temp => temp.Tin)
+            .HasColumnName("TaxIdentificationNumber")
+            .HasColumnType("varchar(8)")
+            .HasDefaultValue("ABC12345");
+
+        // modelBuilder.Entity<Person>().HasIndex(temp => temp.Tin).IsUnique();
+
+        modelBuilder.Entity<Person>().ToTable(table =>
+            table.HasCheckConstraint("CHK_TIN", "length(\"TaxIdentificationNumber\") = 8"));
     }
 
     public IEnumerable<Person> sp_GetAllPersons()
