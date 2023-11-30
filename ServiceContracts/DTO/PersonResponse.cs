@@ -92,7 +92,8 @@ public static class PersonExtensions
             ReceiveNewsLetters = person.ReceiveNewsLetters,
             Age = person.DateOfBirth != null
                 ? Math.Round((DateTime.Now - person.DateOfBirth.Value).TotalDays / 365, MidpointRounding.ToZero)
-                : null
+                : null,
+            CountryName = person.Country?.CountryName
         };
     }
 }

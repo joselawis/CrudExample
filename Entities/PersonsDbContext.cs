@@ -46,6 +46,14 @@ public class PersonsDbContext : DbContext
 
         modelBuilder.Entity<Person>().ToTable(table =>
             table.HasCheckConstraint("CHK_TIN", "length(\"TaxIdentificationNumber\") = 8"));
+
+        // Table relations
+        //  modelBuilder.Entity<Person>(entity =>
+        //  {
+        //      entity.HasOne<Country>(c => c.Country)
+        //          .WithMany(p => p.Persons)
+        //          .HasForeignKey(p => p.CountryId);
+        //  });
     }
 
     public IEnumerable<Person> sp_GetAllPersons()

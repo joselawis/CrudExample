@@ -25,4 +25,6 @@ public class Person
     public bool ReceiveNewsLetters { get; set; }
 
     public string? Tin { get; set; }
+
+    [ForeignKey("CountryId")] public Country? Country { get; set; }
 }

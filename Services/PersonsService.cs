@@ -1,4 +1,5 @@
 using Entities;
+using Microsoft.EntityFrameworkCore;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
@@ -26,21 +27,26 @@ public class PersonsService : IPersonsService
         var person = personAddRequest.ToPerson();
         person.PersonId = Guid.NewGuid();
 
-        _db.sp_InsertPerson(person);
+        _db.Persons.Add(person);
+        _db.SaveChanges();
+        //_db.sp_InsertPerson(person);
 
-        return ConvertPersonToPersonResponse(person);
+        return person.ToPersonResponse();
     }
 
     public List<PersonResponse> GetAllPersons()
     {
-        return _db.sp_GetAllPersons().Select(ConvertPersonToPersonResponse).ToList();
+        var persons = _db.Persons.Include("Country").ToList();
+
+        return persons.Select(person => person.ToPersonResponse()).ToList();
+        // return _db.sp_GetAllPersons().Select(person => person.ToPersonResponse()).ToList();
     }
 
     public PersonResponse? GetPersonByPersonId(Guid? personId)
     {
         if (personId == null) return null;
-        var person = _db.Persons.FirstOrDefault(p => p.PersonId == personId);
-        return person == null ? null : ConvertPersonToPersonResponse(person);
+        var person = _db.Persons.Include("Country").FirstOrDefault(p => p.PersonId == personId);
+        return person?.ToPersonResponse();
     }
 
     public List<PersonResponse> GetFilteredPersons(string searchBy, string? searchString)
@@ -118,7 +124,7 @@ public class PersonsService : IPersonsService
 
         _db.SaveChanges();
 
-        return ConvertPersonToPersonResponse(matchingPerson);
+        return matchingPerson.ToPersonResponse();
     }
 
     public bool DeletePerson(Guid? personId)
@@ -137,12 +143,5 @@ public class PersonsService : IPersonsService
         return (sortOrder.Equals(SortOrderOptions.Asc)
             ? allPersons.OrderBy(keySelector)
             : allPersons.OrderByDescending(keySelector)).ToList();
-    }
-
-    private PersonResponse ConvertPersonToPersonResponse(Person person)
-    {
-        var personResponse = person.ToPersonResponse();
-        personResponse.CountryName = _countriesService.GetCountryByCountryId(person.CountryId)?.CountryName;
-        return personResponse;
     }
 }
