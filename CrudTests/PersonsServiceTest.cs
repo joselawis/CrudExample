@@ -28,9 +28,9 @@ public class PersonsServiceTest
 
     // When we sort based on PersonName in DESC, it should return persons list in descending order
     [Fact]
-    public void GetSortedPersons()
+    public async Task GetSortedPersons()
     {
-        var allPersons = AddDummyPersons();
+        var allPersons = await AddDummyPersons();
         var sortedAllPersons = allPersons.OrderByDescending(p => p.PersonName).ToList();
 
         // Print expected
@@ -38,7 +38,7 @@ public class PersonsServiceTest
         allPersons.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
 
 
-        var personsSorted =
+        var personsSorted = await
             _personsService.GetSortedPersons(allPersons, nameof(PersonResponse.PersonName), SortOrderOptions.Desc);
         // Print actual
         _testOutputHelper.WriteLine("Actual:");
@@ -51,15 +51,15 @@ public class PersonsServiceTest
 
     #endregion
 
-    private List<PersonResponse> AddDummyPersons()
+    private async Task<List<PersonResponse>> AddDummyPersons()
     {
         var countryAddRequest1 = new CountryAddRequest { CountryName = "USA" };
         var countryAddRequest2 = new CountryAddRequest { CountryName = "España" };
         var countryAddRequest3 = new CountryAddRequest { CountryName = "India" };
 
-        var countryAddResponse1 = _countriesService.AddCountry(countryAddRequest1);
-        var countryAddResponse2 = _countriesService.AddCountry(countryAddRequest2);
-        var countryAddResponse3 = _countriesService.AddCountry(countryAddRequest3);
+        var countryAddResponse1 = await _countriesService.AddCountry(countryAddRequest1);
+        var countryAddResponse2 = await _countriesService.AddCountry(countryAddRequest2);
+        var countryAddResponse3 = await _countriesService.AddCountry(countryAddRequest3);
 
         var personAddRequest1 = new PersonAddRequest
         {
@@ -84,7 +84,8 @@ public class PersonsServiceTest
         {
             personAddRequest1, personAddRequest2, personAddRequest3
         };
-        var allPersons = personsRequest.Select(p => _personsService.AddPerson(p)).ToList();
+        var allPersons = personsRequest.Select(async p => await _personsService.AddPerson(p))
+            .Select(p => p.Result).ToList();
         return allPersons;
     }
 
@@ -92,37 +93,39 @@ public class PersonsServiceTest
 
     // When we supply null as PersonUpdateRequest, it should throw ArgumentNullException
     [Fact]
-    public void UpdatePerson_NullPersonUpdateRequest()
+    public async Task UpdatePerson_NullPersonUpdateRequest()
     {
-        Assert.Throws<ArgumentNullException>(() => _personsService.UpdatePerson(null));
+        await Assert.ThrowsAsync<ArgumentNullException>(async () => await _personsService.UpdatePerson(null));
     }
 
     // When we supply invalid person id, it should throw ArgumentException
     [Fact]
-    public void UpdatePerson_InvalidPersonId()
+    public async Task UpdatePerson_InvalidPersonId()
     {
         var personUpdateRequest = new PersonUpdateRequest { PersonId = Guid.NewGuid() };
-        Assert.Throws<ArgumentException>(() => _personsService.UpdatePerson(personUpdateRequest));
+        await Assert.ThrowsAsync<ArgumentException>(async () =>
+            await _personsService.UpdatePerson(personUpdateRequest));
     }
 
     // When PersonName is null, it should throw ArgumentException
     [Fact]
-    public void UpdatePerson_NullPersonName()
+    public async Task UpdatePerson_NullPersonName()
     {
-        var allPersons = AddDummyPersons();
+        var allPersons = await AddDummyPersons();
         var personUpdateRequest = allPersons[0].ToPersonUpdateRequest();
         personUpdateRequest.PersonName = null;
-        Assert.Throws<ArgumentException>(() => _personsService.UpdatePerson(personUpdateRequest));
+        await Assert.ThrowsAsync<ArgumentException>(async () =>
+            await _personsService.UpdatePerson(personUpdateRequest));
     }
 
     // When we supply a valid person update request, it should update the person
     [Fact]
-    public void UpdatePerson_ValidPersonUpdateRequest()
+    public async Task UpdatePerson_ValidPersonUpdateRequest()
     {
-        var allPersons = AddDummyPersons();
+        var allPersons = await AddDummyPersons();
         var personUpdateRequest = allPersons[0].ToPersonUpdateRequest();
         personUpdateRequest.PersonName = "Juanito";
-        var updatedPerson = _personsService.UpdatePerson(personUpdateRequest);
+        var updatedPerson = await _personsService.UpdatePerson(personUpdateRequest);
         Assert.Equal(personUpdateRequest.PersonName, updatedPerson.PersonName);
     }
 
@@ -132,16 +135,16 @@ public class PersonsServiceTest
 
     // If the search text is empty and search by is "PersonName", it should return all the persons
     [Fact]
-    public void GetFilteredPersons_EmptySearchText()
+    public async Task GetFilteredPersons_EmptySearchText()
     {
-        var allPersons = AddDummyPersons();
+        var allPersons = await AddDummyPersons();
 
         // Print expected
         _testOutputHelper.WriteLine("Expected:");
         allPersons.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
 
 
-        var personsFromFilteredSearch = _personsService.GetFilteredPersons(nameof(PersonResponse.PersonName), "");
+        var personsFromFilteredSearch = await _personsService.GetFilteredPersons(nameof(PersonResponse.PersonName), "");
         // Print actual
         _testOutputHelper.WriteLine("Actual:");
         personsFromFilteredSearch.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
@@ -153,15 +156,16 @@ public class PersonsServiceTest
 
     // First we will add few persons, then we will search based on person name with some search string. It should return the matching persons.
     [Fact]
-    public void GetFilteredPersons_SearchByPersonName()
+    public async Task GetFilteredPersons_SearchByPersonName()
     {
-        var allPersons = AddDummyPersons();
+        var allPersons = await AddDummyPersons();
 
         // Print expected
         _testOutputHelper.WriteLine("Expected:");
         allPersons.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
 
-        var personsFromFilteredSearch = _personsService.GetFilteredPersons(nameof(PersonResponse.PersonName), "ma");
+        var personsFromFilteredSearch =
+            await _personsService.GetFilteredPersons(nameof(PersonResponse.PersonName), "ma");
         // Print actual
         _testOutputHelper.WriteLine("Actual:");
         personsFromFilteredSearch.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
@@ -188,13 +192,13 @@ public class PersonsServiceTest
 
     // If we supply a valid PersonId, it should return a PersonResponse
     [Fact]
-    public void GetPersonByPersonId_ValidPersonId()
+    public async Task GetPersonByPersonId_ValidPersonId()
     {
         var countryAddRequest = new CountryAddRequest
         {
             CountryName = "CountryName"
         };
-        var countryResponse = _countriesService.AddCountry(countryAddRequest);
+        var countryResponse = await _countriesService.AddCountry(countryAddRequest);
 
         var personAddRequest = new PersonAddRequest
         {
@@ -206,9 +210,9 @@ public class PersonsServiceTest
             Gender = GenderOptions.Male,
             ReceiveNewsLetters = true
         };
-        var addPersonResponse = _personsService.AddPerson(personAddRequest);
+        var addPersonResponse = await _personsService.AddPerson(personAddRequest);
 
-        var getPersonResponse = _personsService.GetPersonByPersonId(addPersonResponse.PersonId);
+        var getPersonResponse = await _personsService.GetPersonByPersonId(addPersonResponse.PersonId);
 
         Assert.Equal(addPersonResponse, getPersonResponse);
     }
@@ -219,25 +223,25 @@ public class PersonsServiceTest
 
     // When we supply null value as PersonAddRequest, it should throw ArgumentNullException
     [Fact]
-    public void AddPerson_NullPerson()
+    public async Task AddPerson_NullPerson()
     {
-        Assert.Throws<ArgumentNullException>(() => _personsService.AddPerson(null));
+        await Assert.ThrowsAsync<ArgumentNullException>(async () => await _personsService.AddPerson(null));
     }
 
     // When we supply null value as PersonName, it should throw ArgumentException
     [Fact]
-    public void AddPerson_PersonNameIsNull()
+    public async Task AddPerson_PersonNameIsNull()
     {
         var personAddRequest = new PersonAddRequest
         {
             PersonName = null
         };
-        Assert.Throws<ArgumentException>(() => _personsService.AddPerson(personAddRequest));
+        await Assert.ThrowsAsync<ArgumentException>(async () => await _personsService.AddPerson(personAddRequest));
     }
 
     // When we supply proper person details, it should insert the person into the persons list; and it should return an object of PersonResponse, with newly generated PersonId
     [Fact]
-    public void AddPerson_ProperPersonDetails()
+    public async Task AddPerson_ProperPersonDetails()
     {
         var personAddRequest = new PersonAddRequest
         {
@@ -250,9 +254,9 @@ public class PersonsServiceTest
             ReceiveNewsLetters = true
         };
 
-        var response = _personsService.AddPerson(personAddRequest);
+        var response = await _personsService.AddPerson(personAddRequest);
 
-        var personsList = _personsService.GetAllPersons();
+        var personsList = await _personsService.GetAllPersons();
 
         Assert.True(response.PersonId != Guid.Empty);
         Assert.Contains(response, personsList);
@@ -264,24 +268,24 @@ public class PersonsServiceTest
 
     // The list of persons should be empty by default
     [Fact]
-    public void GetAllPersons_EmptyList()
+    public async Task GetAllPersons_EmptyList()
     {
-        var persons = _personsService.GetAllPersons();
+        var persons = await _personsService.GetAllPersons();
 
         Assert.Empty(persons);
     }
 
     // First, we will add few Persons, then when we call GetAllPersons, it should return the list of Persons
     [Fact]
-    public void GetAllPersons_AddFewPersons()
+    public async Task GetAllPersons_AddFewPersons()
     {
-        var allPersons = AddDummyPersons();
+        var allPersons = await AddDummyPersons();
 
         // Print expected
         _testOutputHelper.WriteLine("Expected:");
         allPersons.ForEach(p => _testOutputHelper.WriteLine(p.ToString()));
 
-        var personsFromGetAllPersons = _personsService.GetAllPersons();
+        var personsFromGetAllPersons = await _personsService.GetAllPersons();
 
         // Print actual
         _testOutputHelper.WriteLine("Actual:");
@@ -298,28 +302,28 @@ public class PersonsServiceTest
 
     // If you supply an invalid PersonId, it should return false
     [Fact]
-    public void DeletePerson_InvalidPersonId()
+    public async Task DeletePerson_InvalidPersonId()
     {
-        var result = _personsService.DeletePerson(Guid.NewGuid());
+        var result = await _personsService.DeletePerson(Guid.NewGuid());
 
         Assert.False(result);
     }
 
     // If you supply a null personId, it should throw ArgumentNullException
     [Fact]
-    public void DeletePerson_PersonIdIsNull()
+    public async Task DeletePerson_PersonIdIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => _personsService.DeletePerson(null));
+        await Assert.ThrowsAsync<ArgumentNullException>(async () => await _personsService.DeletePerson(null));
     }
 
     // If you supply a valid PersonId, it should return true
     [Fact]
-    public void DeletePerson_ValidPersonId()
+    public async Task DeletePerson_ValidPersonId()
     {
-        var allPersons = AddDummyPersons();
+        var allPersons = await AddDummyPersons();
         var personId = allPersons[0].PersonId;
 
-        var result = _personsService.DeletePerson(personId);
+        var result = await _personsService.DeletePerson(personId);
 
         Assert.True(result);
     }
