@@ -11,7 +11,8 @@ namespace Entities.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            string sp_InsertPerson = @"
+            string sp_InsertPerson =
+                @"
                 CREATE OR REPLACE FUNCTION insert_person(
                     p_person_id uuid,
                     p_person_name varchar(40),
@@ -52,7 +53,8 @@ namespace Entities.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            string sp_InsertPerson = @"
+            string sp_InsertPerson =
+                @"
                 DROP FUNCTION public.insert_person();
                 ";
             migrationBuilder.Sql(sp_InsertPerson);

@@ -10,19 +10,13 @@ namespace Entities.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "TIN",
-                table: "Persons",
-                newName: "Tin");
+            migrationBuilder.RenameColumn(name: "TIN", table: "Persons", newName: "Tin");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "Tin",
-                table: "Persons",
-                newName: "TIN");
+            migrationBuilder.RenameColumn(name: "Tin", table: "Persons", newName: "TIN");
         }
     }
 }

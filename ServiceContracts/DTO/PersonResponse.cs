@@ -26,20 +26,22 @@ public class PersonResponse
     /// <returns>True or false, indicating whether all person details are matched with the specified parameter object</returns>
     public override bool Equals(object? obj)
     {
-        if (obj == null) return false;
+        if (obj == null)
+            return false;
 
-        if (obj.GetType() != typeof(PersonResponse)) return false;
+        if (obj.GetType() != typeof(PersonResponse))
+            return false;
 
         var personToCompare = obj as PersonResponse;
-        return PersonId == personToCompare?.PersonId &&
-               PersonName == personToCompare.PersonName &&
-               Email == personToCompare.Email &&
-               DateOfBirth == personToCompare.DateOfBirth &&
-               Gender == personToCompare.Gender &&
-               CountryId == personToCompare.CountryId &&
-               CountryName == personToCompare.CountryName &&
-               Address == personToCompare.Address &&
-               ReceiveNewsLetters == personToCompare.ReceiveNewsLetters;
+        return PersonId == personToCompare?.PersonId
+            && PersonName == personToCompare.PersonName
+            && Email == personToCompare.Email
+            && DateOfBirth == personToCompare.DateOfBirth
+            && Gender == personToCompare.Gender
+            && CountryId == personToCompare.CountryId
+            && CountryName == personToCompare.CountryName
+            && Address == personToCompare.Address
+            && ReceiveNewsLetters == personToCompare.ReceiveNewsLetters;
     }
 
     public override int GetHashCode()
@@ -49,10 +51,9 @@ public class PersonResponse
 
     public override string ToString()
     {
-        return
-            $"PersonId: {PersonId}, PersonName: {PersonName}, Email: {Email}, DateOfBirth: {DateOfBirth?
-                .ToString("dd MMM yyyy")}, Gender: {Gender}, CountryId: {CountryId}, CountryName: {
-                CountryName}, Address: {Address}, ReceiveNewsLetters: {ReceiveNewsLetters}, Age: {Age}";
+        return $"PersonId: {PersonId}, PersonName: {PersonName}, Email: {Email}, DateOfBirth: {DateOfBirth?
+            .ToString("dd MMM yyyy")}, Gender: {Gender}, CountryId: {CountryId}, CountryName: {
+            CountryName}, Address: {Address}, ReceiveNewsLetters: {ReceiveNewsLetters}, Age: {Age}";
     }
 
     public PersonUpdateRequest ToPersonUpdateRequest()
@@ -63,7 +64,10 @@ public class PersonResponse
             PersonName = PersonName,
             Email = Email,
             DateOfBirth = DateOfBirth,
-            Gender = Gender != null ? (GenderOptions)Enum.Parse(typeof(GenderOptions), Gender, true) : null,
+            Gender =
+                Gender != null
+                    ? (GenderOptions)Enum.Parse(typeof(GenderOptions), Gender, true)
+                    : null,
             CountryId = CountryId,
             Address = Address,
             ReceiveNewsLetters = ReceiveNewsLetters
@@ -90,9 +94,13 @@ public static class PersonExtensions
             CountryId = person.CountryId,
             Address = person.Address,
             ReceiveNewsLetters = person.ReceiveNewsLetters,
-            Age = person.DateOfBirth != null
-                ? Math.Round((DateTime.Now - person.DateOfBirth.Value).TotalDays / 365, MidpointRounding.ToZero)
-                : null,
+            Age =
+                person.DateOfBirth != null
+                    ? Math.Round(
+                        (DateTime.Now - person.DateOfBirth.Value).TotalDays / 365,
+                        MidpointRounding.ToZero
+                    )
+                    : null,
             CountryName = person.Country?.CountryName
         };
     }

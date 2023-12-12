@@ -9,7 +9,8 @@ namespace CrudTests;
 public class CountriesServiceTest
 {
     private readonly ICountriesService _countriesService = new CountriesService(
-        new PersonsDbContext(new DbContextOptionsBuilder<PersonsDbContext>().Options));
+        new PersonsDbContext(new DbContextOptionsBuilder<PersonsDbContext>().Options)
+    );
 
     #region GetCountryByCountryId
 
@@ -28,13 +29,12 @@ public class CountriesServiceTest
     [Fact]
     public async Task GetCountryByCountryId_ValidCountryId()
     {
-        var countryAddRequest = new CountryAddRequest
-        {
-            CountryName = "China"
-        };
+        var countryAddRequest = new CountryAddRequest { CountryName = "China" };
         var countryFromAdd = await _countriesService.AddCountry(countryAddRequest);
 
-        var countryFromGet = await _countriesService.GetCountryByCountryId(countryFromAdd.CountryId);
+        var countryFromGet = await _countriesService.GetCountryByCountryId(
+            countryFromAdd.CountryId
+        );
 
         Assert.Equal(countryFromAdd, countryFromGet);
     }
@@ -49,33 +49,30 @@ public class CountriesServiceTest
     {
         CountryAddRequest? request = null;
 
-        await Assert.ThrowsAsync<ArgumentNullException>(async () => { await _countriesService.AddCountry(request); });
+        await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+        {
+            await _countriesService.AddCountry(request);
+        });
     }
 
     // When the CountryName is null, it should throw ArgumentException
     [Fact]
     public async Task AddCountry_CountryNameIsNull()
     {
-        var request = new CountryAddRequest
-        {
-            CountryName = null
-        };
+        var request = new CountryAddRequest { CountryName = null };
 
-        await Assert.ThrowsAsync<ArgumentException>(async () => { await _countriesService.AddCountry(request); });
+        await Assert.ThrowsAsync<ArgumentException>(async () =>
+        {
+            await _countriesService.AddCountry(request);
+        });
     }
 
     // When the CountryName is duplicate, it should throw ArgumentException
     [Fact]
     public async Task AddCountry_DuplicatedCountryName()
     {
-        var request = new CountryAddRequest
-        {
-            CountryName = "USA"
-        };
-        var request2 = new CountryAddRequest
-        {
-            CountryName = "USA"
-        };
+        var request = new CountryAddRequest { CountryName = "USA" };
+        var request2 = new CountryAddRequest { CountryName = "USA" };
 
         await Assert.ThrowsAsync<ArgumentException>(async () =>
         {
@@ -88,10 +85,7 @@ public class CountriesServiceTest
     [Fact]
     public async Task AddCountry_ProperCountryDetails()
     {
-        var request = new CountryAddRequest
-        {
-            CountryName = "Japan"
-        };
+        var request = new CountryAddRequest { CountryName = "Japan" };
 
         var response = await _countriesService.AddCountry(request);
         var countriesFromGetAllCountries = await _countriesService.GetAllCountries();
@@ -119,13 +113,15 @@ public class CountriesServiceTest
     {
         var countryRequestList = new List<CountryAddRequest>
         {
-            new() { CountryName = "USA" }, new() { CountryName = "Japan" },
+            new() { CountryName = "USA" },
+            new() { CountryName = "Japan" },
             new() { CountryName = "Spain" }
         };
 
         var countriesListFromAddCountry = countryRequestList
             .Select(async countryRequest => await _countriesService.AddCountry(countryRequest))
-            .Select(c => c.Result).ToList();
+            .Select(c => c.Result)
+            .ToList();
 
         var response = await _countriesService.GetAllCountries();
 

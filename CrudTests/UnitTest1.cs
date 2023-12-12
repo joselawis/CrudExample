@@ -6,7 +6,8 @@ public class UnitTest1
     public void Test1()
     {
         // Arrange
-        const int input1 = 10, input2 = 5;
+        const int input1 = 10,
+            input2 = 5;
         const int expected = 15;
 
         // Act

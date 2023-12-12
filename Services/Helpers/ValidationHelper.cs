@@ -8,7 +8,13 @@ public static class ValidationHelper
     {
         var validationContext = new ValidationContext(model);
         var validationResults = new List<ValidationResult>();
-        var isValid = Validator.TryValidateObject(model, validationContext, validationResults, true);
-        if (!isValid) throw new ArgumentException(validationResults.FirstOrDefault()?.ErrorMessage);
+        var isValid = Validator.TryValidateObject(
+            model,
+            validationContext,
+            validationResults,
+            true
+        );
+        if (!isValid)
+            throw new ArgumentException(validationResults.FirstOrDefault()?.ErrorMessage);
     }
 }

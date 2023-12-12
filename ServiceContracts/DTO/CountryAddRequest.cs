@@ -11,9 +11,6 @@ public class CountryAddRequest
 
     public Country ToCountry()
     {
-        return new Country
-        {
-            CountryName = CountryName
-        };
+        return new Country { CountryName = CountryName };
     }
 }

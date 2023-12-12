@@ -12,13 +12,16 @@ public class CountryResponse
 
     public override bool Equals(object? obj)
     {
-        if (obj == null) return false;
+        if (obj == null)
+            return false;
 
-        if (obj.GetType() != typeof(CountryResponse)) return false;
+        if (obj.GetType() != typeof(CountryResponse))
+            return false;
 
         var countryToCompare = obj as CountryResponse;
-        return countryToCompare != null && CountryId == countryToCompare.CountryId &&
-               CountryName == countryToCompare.CountryName;
+        return countryToCompare != null
+            && CountryId == countryToCompare.CountryId
+            && CountryName == countryToCompare.CountryName;
     }
 
     public override int GetHashCode()
@@ -33,7 +36,8 @@ public static class CountryExtensions
     {
         return new CountryResponse
         {
-            CountryId = country.CountryId, CountryName = country.CountryName
+            CountryId = country.CountryId,
+            CountryName = country.CountryName
         };
     }
 }

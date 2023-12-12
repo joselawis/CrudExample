@@ -13,15 +13,14 @@ namespace Entities.Migrations
             migrationBuilder.AddCheckConstraint(
                 name: "CHK_TIN",
                 table: "Persons",
-                sql: "length(\"TaxIdentificationNumber\") = 8");
+                sql: "length(\"TaxIdentificationNumber\") = 8"
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropCheckConstraint(
-                name: "CHK_TIN",
-                table: "Persons");
+            migrationBuilder.DropCheckConstraint(name: "CHK_TIN", table: "Persons");
         }
     }
 }

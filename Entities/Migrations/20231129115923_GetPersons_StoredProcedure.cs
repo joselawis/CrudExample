@@ -10,7 +10,8 @@ namespace Entities.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            string sp_GetAllPersons = @"
+            string sp_GetAllPersons =
+                @"
                 CREATE OR REPLACE FUNCTION get_all_persons()
                     RETURNS TABLE (
                         PersonId UUID,
@@ -43,7 +44,8 @@ namespace Entities.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            string sp_GetAllPersons = @"
+            string sp_GetAllPersons =
+                @"
                 DROP FUNCTION public.get_all_persons();
                 ";
             migrationBuilder.Sql(sp_GetAllPersons);

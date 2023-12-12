@@ -17,10 +17,12 @@ public class CountriesService : ICountriesService
     public async Task<CountryResponse> AddCountry(CountryAddRequest? countryAddRequest)
     {
         // Validation: countryAddRequest parameter can't be null
-        if (countryAddRequest == null) throw new ArgumentNullException(nameof(countryAddRequest));
+        if (countryAddRequest == null)
+            throw new ArgumentNullException(nameof(countryAddRequest));
 
         // Validation: countryAddRequest.Name parameter can't be null
-        if (countryAddRequest.CountryName == null) throw new ArgumentException(nameof(countryAddRequest.CountryName));
+        if (countryAddRequest.CountryName == null)
+            throw new ArgumentException(nameof(countryAddRequest.CountryName));
 
         // Validation: Duplicate CountryNames are not allowed
         if (await _db.Countries.AnyAsync(c => c.CountryName == countryAddRequest.CountryName))
@@ -45,8 +47,9 @@ public class CountriesService : ICountriesService
         if (countryId == null)
             return null;
 
-        var countryResponseFromList = await _db.Countries
-            .FirstOrDefaultAsync(temp => temp.CountryId == countryId);
+        var countryResponseFromList = await _db.Countries.FirstOrDefaultAsync(
+            temp => temp.CountryId == countryId
+        );
 
         return countryResponseFromList?.ToCountryResponse();
     }

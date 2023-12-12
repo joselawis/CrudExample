@@ -17,7 +17,8 @@ public class PersonAddRequest
     [DataType(DataType.EmailAddress)]
     public string? Email { get; init; }
 
-    [DataType(DataType.Date)] public DateTime? DateOfBirth { get; init; }
+    [DataType(DataType.Date)]
+    public DateTime? DateOfBirth { get; init; }
 
     [Required(ErrorMessage = "Please select gender of the person")]
     public GenderOptions? Gender { get; init; }
