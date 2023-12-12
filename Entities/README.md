@@ -5,3 +5,5 @@
 `dotnet ef --startup-project ../CrudExample/ database update`
 
 `dotnet ef --startup-project ../CrudExample/ database update  GetPersons_StoredProcedure`
+
+`dotnet csharpier .`
