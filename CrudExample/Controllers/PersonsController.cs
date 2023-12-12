@@ -181,4 +181,10 @@ public class PersonsController : Controller
             PageOrientation = Orientation.Landscape
         };
     }
+
+    public async Task<IActionResult> PersonsCsv()
+    {
+        var memoryStream = await _personsService.GetPersonCsv();
+        return File(memoryStream, "application/octet-stream", "persons.csv");
+    }
 }

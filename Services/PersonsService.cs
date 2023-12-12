@@ -1,3 +1,5 @@
+using System.Globalization;
+using CsvHelper;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using ServiceContracts;
@@ -9,13 +11,11 @@ namespace Services;
 
 public class PersonsService : IPersonsService
 {
-    private readonly ICountriesService _countriesService;
     private readonly PersonsDbContext _db;
 
-    public PersonsService(PersonsDbContext personsDbContext, ICountriesService countriesService)
+    public PersonsService(PersonsDbContext personsDbContext)
     {
         _db = personsDbContext;
-        _countriesService = countriesService;
     }
 
     public async Task<PersonResponse> AddPerson(PersonAddRequest? personAddRequest)
@@ -187,6 +187,21 @@ public class PersonsService : IPersonsService
         _db.Persons.Remove(_db.Persons.First(p => p.PersonId == personId));
         await _db.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<MemoryStream> GetPersonCsv()
+    {
+        var memoryStream = new MemoryStream();
+        var streamWriter = new StreamWriter(memoryStream);
+
+        var csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture, true);
+        csvWriter.WriteHeader<PersonResponse>();
+        await csvWriter.NextRecordAsync();
+        var persons = _db.Persons.Select(p => p.ToPersonResponse()).ToList();
+        await csvWriter.WriteRecordsAsync(persons);
+
+        memoryStream.Position = 0;
+        return memoryStream;
     }
 
     private static List<PersonResponse> ToSortedList(

@@ -20,8 +20,7 @@ public class PersonsServiceTest
             new PersonsDbContext(new DbContextOptionsBuilder<PersonsDbContext>().Options)
         );
         _personsService = new PersonsService(
-            new PersonsDbContext(new DbContextOptionsBuilder<PersonsDbContext>().Options),
-            _countriesService
+            new PersonsDbContext(new DbContextOptionsBuilder<PersonsDbContext>().Options)
         );
         _testOutputHelper = testOutputHelper;
     }

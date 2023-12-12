@@ -62,4 +62,10 @@ public interface IPersonsService
     /// <param name="personId">PersonId to be deleted</param>
     /// <returns>Returns true if the deletion is successful otherwise false</returns>
     Task<bool> DeletePerson(Guid? personId);
+
+    /// <summary>
+    ///     Returns persons as CSV
+    /// </summary>
+    /// <returns>Returns the persons streams as CSV</returns>
+    Task<MemoryStream> GetPersonCsv();
 }
