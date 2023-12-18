@@ -1,7 +1,11 @@
+using System.Drawing;
 using System.Globalization;
 using CsvHelper;
+using CsvHelper.Configuration;
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
@@ -189,16 +193,87 @@ public class PersonsService : IPersonsService
         return true;
     }
 
-    public async Task<MemoryStream> GetPersonCsv()
+    public async Task<MemoryStream> GetPersonsCsv()
     {
         var memoryStream = new MemoryStream();
         var streamWriter = new StreamWriter(memoryStream);
 
-        var csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture, true);
-        csvWriter.WriteHeader<PersonResponse>();
+        var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture);
+        var csvWriter = new CsvWriter(streamWriter, csvConfiguration);
+
+        csvWriter.WriteField(nameof(PersonResponse.PersonName));
+        csvWriter.WriteField(nameof(PersonResponse.Email));
+        csvWriter.WriteField(nameof(PersonResponse.DateOfBirth));
+        csvWriter.WriteField(nameof(PersonResponse.Age));
+        csvWriter.WriteField(nameof(PersonResponse.Gender));
+        csvWriter.WriteField(nameof(PersonResponse.CountryName));
+        csvWriter.WriteField(nameof(PersonResponse.Address));
+        csvWriter.WriteField(nameof(PersonResponse.ReceiveNewsLetters));
         await csvWriter.NextRecordAsync();
+
         var persons = _db.Persons.Select(p => p.ToPersonResponse()).ToList();
-        await csvWriter.WriteRecordsAsync(persons);
+
+        foreach (var person in persons)
+        {
+            csvWriter.WriteField(person.PersonName);
+            csvWriter.WriteField(person.Email);
+            csvWriter.WriteField(
+                person.DateOfBirth.HasValue ? person.DateOfBirth.Value.ToString("yyyy-MM-dd") : ""
+            );
+            csvWriter.WriteField(person.Age);
+            csvWriter.WriteField(person.Gender);
+            csvWriter.WriteField(person.CountryName);
+            csvWriter.WriteField(person.Address);
+            csvWriter.WriteField(person.ReceiveNewsLetters);
+
+            await csvWriter.NextRecordAsync();
+            await csvWriter.FlushAsync();
+        }
+
+        memoryStream.Position = 0;
+        return memoryStream;
+    }
+
+    public async Task<MemoryStream> GetPersonsExcel()
+    {
+        var memoryStream = new MemoryStream();
+        using var excelPackage = new ExcelPackage(memoryStream);
+        var worksheet = excelPackage.Workbook.Worksheets.Add("PersonsSheet");
+        worksheet.Cells["A1"].Value = "Person Name";
+        worksheet.Cells["B1"].Value = "Email";
+        worksheet.Cells["C1"].Value = "Date of Birth";
+        worksheet.Cells["D1"].Value = "Age";
+        worksheet.Cells["E1"].Value = "Gender";
+        worksheet.Cells["F1"].Value = "Country";
+        worksheet.Cells["G1"].Value = "Address";
+        worksheet.Cells["H1"].Value = "Receive News letters";
+
+        using var headerCells = worksheet.Cells["A1:H1"];
+        headerCells.Style.Fill.PatternType = ExcelFillStyle.Solid;
+        headerCells.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+        headerCells.Style.Font.Bold = true;
+
+        var row = 2;
+        var persons = _db.Persons.Include("Country").Select(p => p.ToPersonResponse()).ToList();
+
+        foreach (var person in persons)
+        {
+            worksheet.Cells[row, 1].Value = person.PersonName;
+            worksheet.Cells[row, 2].Value = person.Email;
+            worksheet.Cells[row, 3].Value = person.DateOfBirth.HasValue
+                ? person.DateOfBirth.Value.ToString("yyyy-MM-dd")
+                : "";
+            worksheet.Cells[row, 4].Value = person.Age;
+            worksheet.Cells[row, 5].Value = person.Gender;
+            worksheet.Cells[row, 6].Value = person.CountryName;
+            worksheet.Cells[row, 7].Value = person.Address;
+            worksheet.Cells[row, 8].Value = person.ReceiveNewsLetters;
+
+            row++;
+        }
+
+        worksheet.Cells[$"A1:H{row}"].AutoFitColumns();
+        await excelPackage.SaveAsync();
 
         memoryStream.Position = 0;
         return memoryStream;

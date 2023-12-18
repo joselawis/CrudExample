@@ -184,7 +184,17 @@ public class PersonsController : Controller
 
     public async Task<IActionResult> PersonsCsv()
     {
-        var memoryStream = await _personsService.GetPersonCsv();
+        var memoryStream = await _personsService.GetPersonsCsv();
         return File(memoryStream, "application/octet-stream", "persons.csv");
+    }
+
+    public async Task<IActionResult> PersonsExcel()
+    {
+        var memoryStream = await _personsService.GetPersonsExcel();
+        return File(
+            memoryStream,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "persons.xlsx"
+        );
     }
 }
