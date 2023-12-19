@@ -69,8 +69,7 @@ public class PersonsController : Controller
             await ProvideCountries();
 
             ViewBag.Errors = ModelState
-                .Values
-                .SelectMany(v => v.Errors)
+                .Values.SelectMany(v => v.Errors)
                 .SelectMany(e => e.ErrorMessage)
                 .ToList();
             return View();
@@ -159,8 +158,7 @@ public class PersonsController : Controller
     private void ProvideErrors()
     {
         ViewBag.Errors = ModelState
-            .Values
-            .SelectMany(v => v.Errors)
+            .Values.SelectMany(v => v.Errors)
             .SelectMany(e => e.ErrorMessage)
             .ToList();
     }

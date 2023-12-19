@@ -22,4 +22,8 @@
         <PackageReference Include="Rotativa.AspNetCore" Version="1.3.2"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Folder Include="Pages\"/>
+    </ItemGroup>
+
 </Project>

@@ -49,7 +49,10 @@ public class CountriesServiceTest
     {
         CountryAddRequest? request = null;
 
-        await Assert.ThrowsAsync<ArgumentNullException>(async () => { await _countriesService.AddCountry(request); });
+        await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+        {
+            await _countriesService.AddCountry(request);
+        });
     }
 
     // When the CountryName is null, it should throw ArgumentException
@@ -58,7 +61,10 @@ public class CountriesServiceTest
     {
         var request = new CountryAddRequest { CountryName = null };
 
-        await Assert.ThrowsAsync<ArgumentException>(async () => { await _countriesService.AddCountry(request); });
+        await Assert.ThrowsAsync<ArgumentException>(async () =>
+        {
+            await _countriesService.AddCountry(request);
+        });
     }
 
     // When the CountryName is duplicate, it should throw ArgumentException

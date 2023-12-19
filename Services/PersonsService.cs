@@ -51,8 +51,7 @@ public class PersonsService : IPersonsService
     {
         if (personId == null)
             return null;
-        var person = await _db.Persons
-            .Include("Country")
+        var person = await _db.Persons.Include("Country")
             .FirstOrDefaultAsync(p => p.PersonId == personId);
         return person?.ToPersonResponse();
     }
@@ -94,9 +93,7 @@ public class PersonsService : IPersonsService
                     .Where(
                         p =>
                             p.DateOfBirth != null
-                            && p.DateOfBirth
-                                .Value
-                                .ToString("dd MMM yyyy")
+                            && p.DateOfBirth.Value.ToString("dd MMM yyyy")
                                 .Contains(searchString, StringComparison.OrdinalIgnoreCase)
                     )
                     .ToList(),
@@ -113,8 +110,7 @@ public class PersonsService : IPersonsService
                     .Where(
                         p =>
                             p.CountryName != null
-                            && p.CountryName
-                                .ToString()
+                            && p.CountryName.ToString()
                                 .Contains(searchString, StringComparison.OrdinalIgnoreCase)
                     )
                     .ToList(),
