@@ -1,4 +1,5 @@
 using Entities;
+using EntityFrameworkCoreMock;
 using Microsoft.EntityFrameworkCore;
 using ServiceContracts;
 using ServiceContracts.DTO;
@@ -16,12 +17,20 @@ public class PersonsServiceTest
 
     public PersonsServiceTest(ITestOutputHelper testOutputHelper)
     {
-        _countriesService = new CountriesService(
-            new PersonsDbContext(new DbContextOptionsBuilder<PersonsDbContext>().Options)
+        var countriesInitialData = new List<Country>();
+        var personsInitialData = new List<Person>();
+
+        var dbContextMock = new DbContextMock<ApplicationDbContext>(
+            new DbContextOptionsBuilder<ApplicationDbContext>().Options
         );
-        _personsService = new PersonsService(
-            new PersonsDbContext(new DbContextOptionsBuilder<PersonsDbContext>().Options)
-        );
+
+        var dbContext = dbContextMock.Object;
+        dbContextMock.CreateDbSetMock(context => context.Countries, countriesInitialData);
+        dbContextMock.CreateDbSetMock(context => context.Persons, personsInitialData);
+
+        _countriesService = new CountriesService(dbContext);
+        _personsService = new PersonsService(dbContext, _countriesService);
+
         _testOutputHelper = testOutputHelper;
     }
 
@@ -209,11 +218,11 @@ public class PersonsServiceTest
 
     // If we supply null value as PersonId, it should return null as PersonResponse
     [Fact]
-    public void GetPersonByPersonId_NullPersonId()
+    public async void GetPersonByPersonId_NullPersonId()
     {
-        var personId = Guid.Empty;
+        Guid? personId = null;
 
-        var personResponse = _personsService.GetPersonByPersonId(personId);
+        var personResponse = await _personsService.GetPersonByPersonId(personId);
 
         Assert.Null(personResponse);
     }

@@ -15,11 +15,13 @@ namespace Services;
 
 public class PersonsService : IPersonsService
 {
-    private readonly PersonsDbContext _db;
+    private readonly ICountriesService _countriesService;
+    private readonly ApplicationDbContext _db;
 
-    public PersonsService(PersonsDbContext personsDbContext)
+    public PersonsService(ApplicationDbContext personDbContext, ICountriesService countriesService)
     {
-        _db = personsDbContext;
+        _db = personDbContext;
+        _countriesService = countriesService;
     }
 
     public async Task<PersonResponse> AddPerson(PersonAddRequest? personAddRequest)
@@ -184,8 +186,14 @@ public class PersonsService : IPersonsService
     {
         if (personId == null)
             throw new ArgumentNullException(nameof(personId));
-        _db.Persons.Remove(_db.Persons.First(p => p.PersonId == personId));
+
+        var person = await _db.Persons.FirstOrDefaultAsync(p => p.PersonId == personId);
+        if (person == null)
+            return false;
+
+        _db.Persons.Remove(_db.Persons.First(temp => temp.PersonId == personId));
         await _db.SaveChangesAsync();
+
         return true;
     }
 
