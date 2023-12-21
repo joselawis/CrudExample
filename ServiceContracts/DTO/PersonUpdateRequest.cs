@@ -17,7 +17,7 @@ public class PersonUpdateRequest
 
     [Required(ErrorMessage = "Email cannot be blank")]
     [EmailAddress(ErrorMessage = "Please enter a valid email address")]
-    public string? Email { get; init; }
+    public string? Email { get; set; }
 
     public DateTime? DateOfBirth { get; init; }
     public GenderOptions? Gender { get; init; }
