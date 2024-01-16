@@ -43,7 +43,7 @@ public class PersonsServiceTest
 
         // Create services based on mocked DbContext object
         _countriesService = new CountriesService(null);
-        _personsService = new PersonsService(dbContext, _countriesService);
+        _personsService = new PersonsService(null);
 
         _testOutputHelper = testOutputHelper;
     }
