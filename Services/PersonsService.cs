@@ -56,11 +56,6 @@ public class PersonsService : IPersonsService
         string? searchString
     )
     {
-        if (string.IsNullOrEmpty(searchString) || string.IsNullOrEmpty(searchBy))
-            return (await _personsRepository.GetAllPersons())
-                .Select(person => person.ToPersonResponse())
-                .ToList();
-
         var persons = searchBy switch
         {
             nameof(PersonResponse.PersonName)

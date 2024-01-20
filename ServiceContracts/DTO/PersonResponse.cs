@@ -8,7 +8,7 @@ namespace ServiceContracts.DTO;
 /// </summary>
 public class PersonResponse
 {
-    public Guid PersonId { get; init; }
+    public Guid PersonId { get; set; }
     public string? PersonName { get; init; }
     public string? Email { get; init; }
     public DateTime? DateOfBirth { get; init; }
