@@ -25,11 +25,13 @@ var app = builder.Build();
 if (builder.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 
-RotativaConfiguration.Setup("wwwroot");
-app.UseRotativa();
+if (!builder.Environment.IsEnvironment("Test"))
+    RotativaConfiguration.Setup("wwwroot", "Rotativa");
 
 app.UseStaticFiles();
 app.UseRouting();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

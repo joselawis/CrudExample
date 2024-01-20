@@ -72,7 +72,7 @@ public class PersonsController : Controller
                 .Values.SelectMany(v => v.Errors)
                 .SelectMany(e => e.ErrorMessage)
                 .ToList();
-            return View();
+            return View(request);
         }
 
         await _personsService.AddPerson(request);

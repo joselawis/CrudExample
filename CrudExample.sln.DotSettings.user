@@ -7,6 +7,10 @@
     &lt;TestId&gt;xUnit::3CE41824-C6B8-46C6-8792-F0CC40E3290A::net7.0::CrudTests.UnitTest1&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::3CE41824-C6B8-46C6-8792-F0CC40E3290A::net7.0::CrudTests.CountriesServiceTest&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::3CE41824-C6B8-46C6-8792-F0CC40E3290A::net7.0::CrudTests.PersonsServiceTest&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::3CE41824-C6B8-46C6-8792-F0CC40E3290A::net7.0::CrudTests.PersonsControllerTest.Index_ShouldReturnIndexViewWithPersonsList&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::3CE41824-C6B8-46C6-8792-F0CC40E3290A::net7.0::CrudTests.PersonsControllerTest.Create_IfModelErrors_ShouldReturnCreateView&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::3CE41824-C6B8-46C6-8792-F0CC40E3290A::net7.0::CrudTests.PersonsControllerTest.Create_IfNoModelErrors_ShouldReturnCreateView&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::3CE41824-C6B8-46C6-8792-F0CC40E3290A::net7.0::CrudTests.PersonsControllerIntegrationTest&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Espa_00F1a/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
