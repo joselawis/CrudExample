@@ -15,8 +15,11 @@ public class PersonsController : Controller
     private readonly ILogger<PersonsController> _logger;
     private readonly IPersonsService _personsService;
 
-    public PersonsController(IPersonsService personsService, ICountriesService countriesService,
-        ILogger<PersonsController> logger)
+    public PersonsController(
+        IPersonsService personsService,
+        ICountriesService countriesService,
+        ILogger<PersonsController> logger
+    )
     {
         _personsService = personsService;
         _countriesService = countriesService;
@@ -34,7 +37,8 @@ public class PersonsController : Controller
     {
         _logger.LogInformation("Index action method of PersonsController");
         _logger.LogDebug(
-            $"searchBy: {searchBy}, searchString: {searchString}, sortBy: {sortBy}, sortOrder: {sortOrder}");
+            $"searchBy: {searchBy}, searchString: {searchString}, sortBy: {sortBy}, sortOrder: {sortOrder}"
+        );
         // Searching
         ViewBag.SearchField = new Dictionary<string, string>
         {

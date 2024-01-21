@@ -1,4 +1,5 @@
 using Entities;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using RepositoryContracts;
@@ -10,6 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Logging
 builder.Logging.ClearProviders().AddConsole();
+
+builder.Services.AddHttpLogging(options =>
+{
+    options.LoggingFields =
+        HttpLoggingFields.RequestProperties | HttpLoggingFields.ResponsePropertiesAndHeaders;
+});
 
 // Controller
 builder.Services.AddControllersWithViews();
@@ -33,6 +40,8 @@ var app = builder.Build();
 // Environment setting
 if (builder.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
+
+app.UseHttpLogging();
 
 // app.Logger.LogDebug("DEBUG MESSAGE");
 // app.Logger.LogInformation("INFORMATION MESSAGE");

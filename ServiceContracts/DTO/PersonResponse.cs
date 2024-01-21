@@ -34,14 +34,14 @@ public class PersonResponse
 
         var personToCompare = obj as PersonResponse;
         return PersonId == personToCompare?.PersonId
-               && PersonName == personToCompare.PersonName
-               && Email == personToCompare.Email
-               && DateOfBirth == personToCompare.DateOfBirth
-               && Gender == personToCompare.Gender
-               && CountryId == personToCompare.CountryId
-               && CountryName == personToCompare.CountryName
-               && Address == personToCompare.Address
-               && ReceiveNewsLetters == personToCompare.ReceiveNewsLetters;
+            && PersonName == personToCompare.PersonName
+            && Email == personToCompare.Email
+            && DateOfBirth == personToCompare.DateOfBirth
+            && Gender == personToCompare.Gender
+            && CountryId == personToCompare.CountryId
+            && CountryName == personToCompare.CountryName
+            && Address == personToCompare.Address
+            && ReceiveNewsLetters == personToCompare.ReceiveNewsLetters;
     }
 
     public override int GetHashCode()

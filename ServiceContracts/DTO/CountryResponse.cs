@@ -20,8 +20,8 @@ public class CountryResponse
 
         var countryToCompare = obj as CountryResponse;
         return countryToCompare != null
-               && CountryId == countryToCompare.CountryId
-               && CountryName == countryToCompare.CountryName;
+            && CountryId == countryToCompare.CountryId
+            && CountryName == countryToCompare.CountryName;
     }
 
     public override int GetHashCode()
