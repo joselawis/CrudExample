@@ -4,15 +4,21 @@ using Microsoft.EntityFrameworkCore;
 using Repositories;
 using RepositoryContracts;
 using Rotativa.AspNetCore;
+using Serilog;
 using ServiceContracts;
 using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Logging
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-builder.Logging.AddDebug();
+// Serilog
+builder.Host.UseSerilog(
+    (context, services, loggerConfiguration) =>
+    {
+        loggerConfiguration
+            .ReadFrom.Configuration(context.Configuration) // Read configuration settings from built-in IConfiguration
+            .ReadFrom.Services(services); // Read out current app services and make them available to serilog
+    }
+);
 
 builder.Services.AddHttpLogging(options =>
 {
