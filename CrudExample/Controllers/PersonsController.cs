@@ -1,3 +1,4 @@
+using CrudExample.Filters.ActionFilters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Rotativa.AspNetCore;
@@ -28,6 +29,7 @@ public class PersonsController : Controller
 
     [Route("/")]
     [Route("")]
+    [TypeFilter(typeof(PersonsListActionFilter))]
     public async Task<IActionResult> Index(
         string searchBy,
         string? searchString,
@@ -37,26 +39,17 @@ public class PersonsController : Controller
     {
         _logger.LogInformation("Index action method of PersonsController");
         _logger.LogDebug(
-            $"searchBy: {searchBy}, searchString: {searchString}, sortBy: {sortBy}, sortOrder: {sortOrder}"
+            "searchBy: {SearchBy}, searchString: {SearchString}, sortBy: {SortBy}, sortOrder: {SortOrder}",
+            searchBy,
+            searchString,
+            sortBy,
+            sortOrder
         );
         // Searching
-        ViewBag.SearchField = new Dictionary<string, string>
-        {
-            { nameof(PersonResponse.PersonName), "Person Name" },
-            { nameof(PersonResponse.Email), "Email" },
-            { nameof(PersonResponse.DateOfBirth), "Date Of Birth" },
-            { nameof(PersonResponse.Gender), "Gender" },
-            { nameof(PersonResponse.CountryId), "Country" },
-            { nameof(PersonResponse.Address), "Address" }
-        };
         var allPerson = await _personsService.GetFilteredPersons(searchBy, searchString);
-        ViewBag.CurrentSearchBy = searchBy;
-        ViewBag.CurrentSearchString = searchString!;
 
         // Sorting
         var sortedPersons = await _personsService.GetSortedPersons(allPerson, sortBy, sortOrder);
-        ViewBag.CurrentSortBy = sortBy;
-        ViewBag.CurrentSortOrder = sortOrder;
 
         return View(sortedPersons);
     }
