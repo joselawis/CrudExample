@@ -100,10 +100,7 @@ public class PersonsServiceTest
         PersonAddRequest? personAddRequest = null;
 
         // Act
-        var action = async () =>
-        {
-            await _personsService.AddPerson(personAddRequest);
-        };
+        var action = async () => { await _personsService.AddPerson(personAddRequest); };
         await action.Should().ThrowAsync<ArgumentNullException>();
     }
 

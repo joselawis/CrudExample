@@ -12,12 +12,15 @@ namespace CrudExample.Controllers;
 public class PersonsController : Controller
 {
     private readonly ICountriesService _countriesService;
+    private readonly ILogger<PersonsController> _logger;
     private readonly IPersonsService _personsService;
 
-    public PersonsController(IPersonsService personsService, ICountriesService countriesService)
+    public PersonsController(IPersonsService personsService, ICountriesService countriesService,
+        ILogger<PersonsController> logger)
     {
         _personsService = personsService;
         _countriesService = countriesService;
+        _logger = logger;
     }
 
     [Route("/")]
@@ -29,6 +32,9 @@ public class PersonsController : Controller
         SortOrderOptions sortOrder = SortOrderOptions.Asc
     )
     {
+        _logger.LogInformation("Index action method of PersonsController");
+        _logger.LogDebug(
+            $"searchBy: {searchBy}, searchString: {searchString}, sortBy: {sortBy}, sortOrder: {sortOrder}");
         // Searching
         ViewBag.SearchField = new Dictionary<string, string>
         {

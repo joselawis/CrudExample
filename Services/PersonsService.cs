@@ -2,6 +2,7 @@ using System.Drawing;
 using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
+using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using RepositoryContracts;
@@ -14,11 +15,13 @@ namespace Services;
 
 public class PersonsService : IPersonsService
 {
+    private readonly ILogger<PersonsService> _logger;
     private readonly IPersonsRepository _personsRepository;
 
-    public PersonsService(IPersonsRepository personsRepository)
+    public PersonsService(IPersonsRepository personsRepository, ILogger<PersonsService> logger)
     {
         _personsRepository = personsRepository;
+        _logger = logger;
     }
 
     public async Task<PersonResponse> AddPerson(PersonAddRequest? personAddRequest)
@@ -56,6 +59,9 @@ public class PersonsService : IPersonsService
         string? searchString
     )
     {
+        _logger.LogInformation("GetFilteredPersons of PersonsService");
+
+        searchString ??= "";
         var persons = searchBy switch
         {
             nameof(PersonResponse.PersonName)
@@ -105,6 +111,8 @@ public class PersonsService : IPersonsService
         SortOrderOptions sortOrder
     )
     {
+        _logger.LogInformation("GetSortedPersons of PersonsService");
+
         if (string.IsNullOrEmpty(sortBy))
             return Task.FromResult(allPersons);
 
