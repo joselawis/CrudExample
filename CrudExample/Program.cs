@@ -10,7 +10,9 @@ using Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Logging
-builder.Logging.ClearProviders().AddConsole();
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
 
 builder.Services.AddHttpLogging(options =>
 {
