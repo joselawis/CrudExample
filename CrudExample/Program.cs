@@ -26,7 +26,7 @@ if (builder.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 
 if (!builder.Environment.IsEnvironment("Test"))
-    RotativaConfiguration.Setup("wwwroot", "Rotativa");
+    RotativaConfiguration.Setup("wwwroot");
 
 app.UseStaticFiles();
 app.UseRouting();

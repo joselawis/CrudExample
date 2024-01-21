@@ -1,4 +1,6 @@
+using Fizzler.Systems.HtmlAgilityPack;
 using FluentAssertions;
+using HtmlAgilityPack;
 
 namespace CrudTests;
 
@@ -23,6 +25,15 @@ public class PersonsControllerIntegrationTest : IClassFixture<CustomWebApplicati
 
         // Assert
         response.Should().BeSuccessful(); // 2xx response
+
+        var responseBody = await response.Content.ReadAsStringAsync();
+
+        var html = new HtmlDocument();
+        html.LoadHtml(responseBody);
+
+        var document = html.DocumentNode;
+
+        document.QuerySelectorAll("table.persons").Should().NotBeNull();
     }
 
     #endregion
