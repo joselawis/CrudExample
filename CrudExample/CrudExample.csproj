@@ -26,11 +26,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Pages\"/>
+        <InternalVisibleTo Include="CrudTests"/>
     </ItemGroup>
 
     <ItemGroup>
-        <InternalVisibleTo Include="CrudTests"/>
+      <Folder Include="logs\" />
     </ItemGroup>
 
 </Project>
