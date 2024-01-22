@@ -92,7 +92,7 @@ public class PersonsController : Controller
 
     [HttpGet]
     [Route("{personId:guid}")]
-    [TypeFilter(typeof(TokenResultFilter))]
+    // [TypeFilter(typeof(TokenResultFilter))]
     [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
     public async Task<IActionResult> Edit(Guid personId)
     {
@@ -110,6 +110,7 @@ public class PersonsController : Controller
     [Route("{personId:guid}")]
     [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
     [TypeFilter(typeof(TokenAuthorizationFilter))]
+    [TypeFilter(typeof(PersonsAlwaysRunResultFilter))]
     public async Task<IActionResult> Edit(PersonUpdateRequest personRequest, Guid personId)
     {
         var personResponse = await _personsService.GetPersonByPersonId(personRequest.PersonId);
