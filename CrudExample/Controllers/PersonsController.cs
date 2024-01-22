@@ -75,26 +75,17 @@ public class PersonsController : Controller
 
     [HttpPost]
     [Route("")]
-    public async Task<IActionResult> Create(PersonAddRequest request)
+    [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
+    public async Task<IActionResult> Create(PersonAddRequest personRequest)
     {
-        if (!ModelState.IsValid)
-        {
-            await ProvideCountries();
-
-            ViewBag.Errors = ModelState
-                .Values.SelectMany(v => v.Errors)
-                .SelectMany(e => e.ErrorMessage)
-                .ToList();
-            return View(request);
-        }
-
-        await _personsService.AddPerson(request);
+        await _personsService.AddPerson(personRequest);
 
         return RedirectToAction("Index", "Persons");
     }
 
     [HttpGet]
     [Route("{personId:guid}")]
+    [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
     public async Task<IActionResult> Edit(Guid personId)
     {
         var personResponse = await _personsService.GetPersonByPersonId(personId);
@@ -109,22 +100,14 @@ public class PersonsController : Controller
 
     [HttpPost]
     [Route("{personId:guid}")]
-    public async Task<IActionResult> Edit(Guid personId, PersonUpdateRequest personUpdateRequest)
+    [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
+    public async Task<IActionResult> Edit(PersonUpdateRequest personRequest, Guid personId)
     {
-        var personResponse = await _personsService.GetPersonByPersonId(
-            personUpdateRequest.PersonId
-        );
+        var personResponse = await _personsService.GetPersonByPersonId(personRequest.PersonId);
         if (personResponse == null)
             return RedirectToAction("Index");
 
-        if (!ModelState.IsValid)
-        {
-            await ProvideCountries();
-            ProvideErrors();
-            return View(personResponse.ToPersonUpdateRequest());
-        }
-
-        await _personsService.UpdatePerson(personUpdateRequest);
+        await _personsService.UpdatePerson(personRequest);
 
         return RedirectToAction("Index");
     }
@@ -142,11 +125,9 @@ public class PersonsController : Controller
 
     [HttpPost]
     [Route("{personId:guid}")]
-    public async Task<IActionResult> Delete(Guid? personId, PersonUpdateRequest personUpdateRequest)
+    public async Task<IActionResult> Delete(Guid? personId, PersonUpdateRequest personRequest)
     {
-        var personResponse = await _personsService.GetPersonByPersonId(
-            personUpdateRequest.PersonId
-        );
+        var personResponse = await _personsService.GetPersonByPersonId(personRequest.PersonId);
         if (personResponse == null)
             return RedirectToAction("Index");
 
@@ -166,14 +147,6 @@ public class PersonsController : Controller
                     Text = country.CountryName
                 }
         );
-    }
-
-    private void ProvideErrors()
-    {
-        ViewBag.Errors = ModelState
-            .Values.SelectMany(v => v.Errors)
-            .SelectMany(e => e.ErrorMessage)
-            .ToList();
     }
 
     public async Task<IActionResult> PersonsPdf()
