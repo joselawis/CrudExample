@@ -49,6 +49,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.EnableSensitiveDataLogging();
 });
 
+builder.Services.AddTransient<PersonsListActionFilter>();
+
 // Build app
 var app = builder.Build();
 
