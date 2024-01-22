@@ -21,8 +21,6 @@ public class ResponseHeaderActionFilter : IAsyncActionFilter, IOrderedFilter
         Order = order;
     }
 
-    public int Order { get; }
-
     public async Task OnActionExecutionAsync(
         ActionExecutingContext context,
         ActionExecutionDelegate next
@@ -43,4 +41,6 @@ public class ResponseHeaderActionFilter : IAsyncActionFilter, IOrderedFilter
         );
         context.HttpContext.Response.Headers[_key] = _value;
     }
+
+    public int Order { get; }
 }
