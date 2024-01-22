@@ -12,8 +12,8 @@ namespace CrudExample.Controllers;
 [Route("[controller]/[action]")]
 [TypeFilter(
     typeof(ResponseHeaderActionFilter),
-    Arguments = new object[] { "X-Controller-Key", "Controller-Value" },
-    Order = 2
+    Arguments = new object[] { "X-Controller-Key", "Controller-Value", 3 },
+    Order = 3
 )]
 public class PersonsController : Controller
 {
@@ -34,10 +34,10 @@ public class PersonsController : Controller
 
     [Route("/")]
     [Route("")]
-    [TypeFilter(typeof(PersonsListActionFilter))]
+    [TypeFilter(typeof(PersonsListActionFilter), Order = 4)]
     [TypeFilter(
         typeof(ResponseHeaderActionFilter),
-        Arguments = new object[] { "X-Action-Key", "Action-Value" },
+        Arguments = new object[] { "X-Action-Key", "Action-Value", 1 },
         Order = 1
     )]
     public async Task<IActionResult> Index(
@@ -66,10 +66,6 @@ public class PersonsController : Controller
 
     [HttpGet]
     [Route("")]
-    [TypeFilter(
-        typeof(ResponseHeaderActionFilter),
-        Arguments = new object[] { "X-Create-Key", "Custom-Value" }
-    )]
     public async Task<IActionResult> Create()
     {
         await ProvideCountries();
