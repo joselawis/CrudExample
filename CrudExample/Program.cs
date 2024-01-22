@@ -1,3 +1,4 @@
+using CrudExample.Filters.ActionFilters;
 using Entities;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,13 @@ builder.Services.AddHttpLogging(options =>
 });
 
 // Controller
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    var logger = builder
+        .Services.BuildServiceProvider()
+        .GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
+    options.Filters.Add(new ResponseHeaderActionFilter(logger, "X-Global-Key", "Global-Value"));
+});
 
 // Dependency Injection
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();

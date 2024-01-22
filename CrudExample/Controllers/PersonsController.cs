@@ -10,6 +10,11 @@ using ServiceContracts.Enums;
 namespace CrudExample.Controllers;
 
 [Route("[controller]/[action]")]
+[TypeFilter(
+    typeof(ResponseHeaderActionFilter),
+    Arguments = new object[] { "X-Controller-Key", "Controller-Value" },
+    Order = 2
+)]
 public class PersonsController : Controller
 {
     private readonly ICountriesService _countriesService;
@@ -32,7 +37,8 @@ public class PersonsController : Controller
     [TypeFilter(typeof(PersonsListActionFilter))]
     [TypeFilter(
         typeof(ResponseHeaderActionFilter),
-        Arguments = new object[] { "X-Custom-Key", "Custom-Value" }
+        Arguments = new object[] { "X-Action-Key", "Action-Value" },
+        Order = 1
     )]
     public async Task<IActionResult> Index(
         string searchBy,
