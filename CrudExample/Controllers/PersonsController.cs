@@ -1,5 +1,6 @@
 using CrudExample.Filters.ActionFilters;
 using CrudExample.Filters.AuthorizationFilters;
+using CrudExample.Filters.ExceptionFilters;
 using CrudExample.Filters.ResourceFilters;
 using CrudExample.Filters.ResultFilters;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace CrudExample.Controllers;
     Arguments = new object[] { "X-Controller-Key", "Controller-Value", 3 },
     Order = 3
 )]
+[TypeFilter(typeof(HandleExceptionFilter))]
 public class PersonsController : Controller
 {
     private readonly ICountriesService _countriesService;
