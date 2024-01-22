@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace CrudExample.Filters.ActionFilters;
 
-public class ResponseHeaderActionFilter : IActionFilter, IOrderedFilter
+public class ResponseHeaderActionFilter : IAsyncActionFilter, IOrderedFilter
 {
     private readonly string _key;
     private readonly ILogger<ResponseHeaderActionFilter> _logger;
@@ -21,25 +21,26 @@ public class ResponseHeaderActionFilter : IActionFilter, IOrderedFilter
         Order = order;
     }
 
-    public void OnActionExecuting(ActionExecutingContext context)
+    public int Order { get; }
+
+    public async Task OnActionExecutionAsync(
+        ActionExecutingContext context,
+        ActionExecutionDelegate next
+    )
     {
         _logger.LogInformation(
-            "{FilterName}.{MethodName} method called",
+            "{FilterName}.{MethodName} method called - before",
             nameof(ResponseHeaderActionFilter),
-            nameof(OnActionExecuting)
+            nameof(OnActionExecutionAsync)
         );
-    }
 
-    public void OnActionExecuted(ActionExecutedContext context)
-    {
+        await next(); // Calls the subsequent filter or action method
+
         _logger.LogInformation(
-            "{FilterName}.{MethodName} method called",
+            "{FilterName}.{MethodName} method called - after",
             nameof(ResponseHeaderActionFilter),
-            nameof(OnActionExecuted)
+            nameof(OnActionExecutionAsync)
         );
-
         context.HttpContext.Response.Headers[_key] = _value;
     }
-
-    public int Order { get; set; }
 }
