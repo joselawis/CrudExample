@@ -1,3 +1,4 @@
+using CrudExample.Filters;
 using CrudExample.Filters.ActionFilters;
 using CrudExample.Filters.AuthorizationFilters;
 using CrudExample.Filters.ExceptionFilters;
@@ -20,6 +21,7 @@ namespace CrudExample.Controllers;
     Order = 3
 )]
 [TypeFilter(typeof(HandleExceptionFilter))]
+[TypeFilter(typeof(PersonsAlwaysRunResultFilter))]
 public class PersonsController : Controller
 {
     private readonly ICountriesService _countriesService;
@@ -46,6 +48,7 @@ public class PersonsController : Controller
         Order = 1
     )]
     [TypeFilter(typeof(PersonsListResultFilter))]
+    [SkipFilter]
     public async Task<IActionResult> Index(
         string searchBy,
         string? searchString,
@@ -110,7 +113,6 @@ public class PersonsController : Controller
     [Route("{personId:guid}")]
     [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
     [TypeFilter(typeof(TokenAuthorizationFilter))]
-    [TypeFilter(typeof(PersonsAlwaysRunResultFilter))]
     public async Task<IActionResult> Edit(PersonUpdateRequest personRequest, Guid personId)
     {
         var personResponse = await _personsService.GetPersonByPersonId(personRequest.PersonId);
