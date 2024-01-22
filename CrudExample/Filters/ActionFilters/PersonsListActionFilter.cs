@@ -15,8 +15,11 @@ public class PersonsListActionFilter : IActionFilter
 
     public void OnActionExecuting(ActionExecutingContext context)
     {
-        _logger.LogInformation("{FilterName}.{MethodName} method called", 
-            nameof(PersonsListActionFilter), nameof(OnActionExecuting));
+        _logger.LogInformation(
+            "{FilterName}.{MethodName} method called",
+            nameof(PersonsListActionFilter),
+            nameof(OnActionExecuting)
+        );
         context.HttpContext.Items.Add("arguments", context.ActionArguments);
 
         if (!context.ActionArguments.TryGetValue("searchBy", out var argument))
@@ -48,8 +51,11 @@ public class PersonsListActionFilter : IActionFilter
 
     public void OnActionExecuted(ActionExecutedContext context)
     {
-        _logger.LogInformation("{FilterName}.{MethodName} method called", 
-            nameof(PersonsListActionFilter), nameof(OnActionExecuted));
+        _logger.LogInformation(
+            "{FilterName}.{MethodName} method called",
+            nameof(PersonsListActionFilter),
+            nameof(OnActionExecuted)
+        );
         var personsController = (PersonsController)context.Controller;
 
         if (context.HttpContext.Items["arguments"] is Dictionary<string, object?> arguments)

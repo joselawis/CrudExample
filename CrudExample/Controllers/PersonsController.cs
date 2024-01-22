@@ -30,6 +30,10 @@ public class PersonsController : Controller
     [Route("/")]
     [Route("")]
     [TypeFilter(typeof(PersonsListActionFilter))]
+    [TypeFilter(
+        typeof(ResponseHeaderActionFilter),
+        Arguments = new object[] { "X-Custom-Key", "Custom-Value" }
+    )]
     public async Task<IActionResult> Index(
         string searchBy,
         string? searchString,
@@ -56,6 +60,10 @@ public class PersonsController : Controller
 
     [HttpGet]
     [Route("")]
+    [TypeFilter(
+        typeof(ResponseHeaderActionFilter),
+        Arguments = new object[] { "X-Create-Key", "Custom-Value" }
+    )]
     public async Task<IActionResult> Create()
     {
         await ProvideCountries();
