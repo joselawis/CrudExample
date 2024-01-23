@@ -33,7 +33,7 @@ builder.Services.AddControllersWithViews(options =>
     var logger = builder
         .Services.BuildServiceProvider()
         .GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
-    options.Filters.Add(new ResponseHeaderActionFilter(logger, "X-Global-Key", "Global-Value", 2));
+    options.Filters.Add(new ResponseHeaderActionFilter("X-Global-Key", "Global-Value", 2));
 });
 
 // Dependency Injection
