@@ -14,9 +14,7 @@ public class PersonsAlwaysRunResultFilter : IAlwaysRunResultFilter
     public void OnResultExecuting(ResultExecutingContext context)
     {
         if (context.Filters.OfType<SkipFilter>().Any())
-        {
             return;
-        }
         _logger.LogInformation(
             "{FilterName}.{MethodName} - before",
             nameof(PersonsAlwaysRunResultFilter),

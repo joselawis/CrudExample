@@ -5,8 +5,8 @@ namespace CrudExample.Filters.ExceptionFilters;
 
 public class HandleExceptionFilter : IExceptionFilter
 {
-    private readonly ILogger<HandleExceptionFilter> _logger;
     private readonly IHostEnvironment _hostEnvironment;
+    private readonly ILogger<HandleExceptionFilter> _logger;
 
     public HandleExceptionFilter(
         ILogger<HandleExceptionFilter> logger,
@@ -28,7 +28,7 @@ public class HandleExceptionFilter : IExceptionFilter
         );
 
         if (_hostEnvironment.IsDevelopment())
-            context.Result = new ContentResult()
+            context.Result = new ContentResult
             {
                 Content = context.Exception.Message,
                 StatusCode = StatusCodes.Status500InternalServerError

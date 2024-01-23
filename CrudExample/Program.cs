@@ -27,13 +27,22 @@ builder.Services.AddHttpLogging(options =>
         HttpLoggingFields.RequestProperties | HttpLoggingFields.ResponsePropertiesAndHeaders;
 });
 
+builder.Services.AddTransient<ResponseHeaderActionFilter>();
+
 // Controller
 builder.Services.AddControllersWithViews(options =>
 {
     var logger = builder
         .Services.BuildServiceProvider()
         .GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
-    options.Filters.Add(new ResponseHeaderActionFilter("X-Global-Key", "Global-Value", 2));
+    options.Filters.Add(
+        new ResponseHeaderActionFilter(logger)
+        {
+            Key = "X-Global-Key",
+            Value = "Global-Value",
+            Order = 2
+        }
+    );
 });
 
 // Dependency Injection

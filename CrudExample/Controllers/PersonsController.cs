@@ -15,7 +15,7 @@ using ServiceContracts.Enums;
 namespace CrudExample.Controllers;
 
 [Route("[controller]/[action]")]
-[ResponseHeaderActionFilter("X-Controller-Key", "Controller-Value", 3)]
+[ResponseHeaderFilterFactory("X-Controller-Key", "Controller-Value", 3)]
 [TypeFilter(typeof(HandleExceptionFilter))]
 [TypeFilter(typeof(PersonsAlwaysRunResultFilter))]
 public class PersonsController : Controller
@@ -38,7 +38,7 @@ public class PersonsController : Controller
     [Route("/")]
     [Route("")]
     [ServiceFilter(typeof(PersonsListActionFilter), Order = 4)]
-    [ResponseHeaderActionFilter("X-Action-Key", "Action-Value", 1)]
+    [ResponseHeaderFilterFactory("X-Action-Key", "Action-Value", 1)]
     [TypeFilter(typeof(PersonsListResultFilter))]
     [SkipFilter]
     public async Task<IActionResult> Index(
