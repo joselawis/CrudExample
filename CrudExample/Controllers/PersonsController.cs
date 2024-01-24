@@ -16,7 +16,7 @@ namespace CrudExample.Controllers;
 
 [Route("[controller]/[action]")]
 [ResponseHeaderFilterFactory("X-Controller-Key", "Controller-Value", 3)]
-[TypeFilter(typeof(HandleExceptionFilter))]
+// [TypeFilter(typeof(HandleExceptionFilter))]
 [TypeFilter(typeof(PersonsAlwaysRunResultFilter))]
 public class PersonsController : Controller
 {

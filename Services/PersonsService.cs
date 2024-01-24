@@ -2,6 +2,7 @@ using System.Drawing;
 using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
+using Exceptions;
 using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
@@ -147,7 +148,7 @@ public class PersonsService : IPersonsService
             personUpdateRequest.PersonId
         );
         if (matchingPerson == null)
-            throw new ArgumentException("Person not found");
+            throw new InvalidPersonIdException("Person not found");
 
         matchingPerson.PersonName = personUpdateRequest.PersonName;
         matchingPerson.Email = personUpdateRequest.Email;
