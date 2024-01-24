@@ -1,6 +1,7 @@
 using CrudExample.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using ServiceContracts.DTO;
+using ServiceContracts.Enums;
 
 namespace CrudExample.Filters.ActionFilters;
 
@@ -66,8 +67,14 @@ public class PersonsListActionFilter : IActionFilter
                 personsController.ViewData["CurrentSearchString"] = Convert.ToString(searchString);
             if (arguments.TryGetValue("sortBy", out var sortBy))
                 personsController.ViewData["CurrentSortBy"] = Convert.ToString(sortBy);
+            else
+                personsController.ViewData["CurrentSortBy"] = nameof(PersonResponse.PersonName);
             if (arguments.TryGetValue("sortOrder", out var sortOrder))
                 personsController.ViewData["CurrentSortOrder"] = Convert.ToString(sortOrder);
+            else
+                personsController.ViewData["CurrentSortOrder"] = Convert.ToString(
+                    SortOrderOptions.Asc
+                );
         }
 
         personsController.ViewBag.SearchField = new Dictionary<string, string>
