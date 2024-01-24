@@ -45,8 +45,10 @@ public class ExceptionHandlingMiddleware
                 );
             }
 
-            httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            await httpContext.Response.WriteAsync("Error occurred");
+            // httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            // await httpContext.Response.WriteAsync("Error occurred");
+
+            throw;
         }
     }
 }
