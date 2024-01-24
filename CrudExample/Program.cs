@@ -1,3 +1,4 @@
+using CrudExample.Middleware;
 using CrudExample.StartupExtensions;
 using Rotativa.AspNetCore;
 using Serilog;
@@ -22,6 +23,8 @@ var app = builder.Build();
 // Environment setting
 if (builder.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
+else
+    app.UseExceptionHandlingMiddleware();
 
 app.UseHttpLogging();
 
