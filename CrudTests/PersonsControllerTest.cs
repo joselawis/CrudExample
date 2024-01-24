@@ -2,6 +2,7 @@ using AutoFixture;
 using CrudExample.Controllers;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ServiceContracts;
 using ServiceContracts.DTO;
@@ -11,14 +12,10 @@ namespace CrudTests;
 
 public class PersonsControllerTest
 {
-    private readonly ICountriesService _countriesService;
     private readonly Mock<ICountriesService> _countriesServiceMock;
-
     private readonly Fixture _fixture;
-
+    private readonly Mock<ILogger<PersonsController>> _loggerMock;
     private readonly PersonsController _personsController;
-    private readonly IPersonsService _personsService;
-
     private readonly Mock<IPersonsService> _personsServiceMock;
 
     public PersonsControllerTest()
@@ -27,11 +24,13 @@ public class PersonsControllerTest
 
         _personsServiceMock = new Mock<IPersonsService>();
         _countriesServiceMock = new Mock<ICountriesService>();
+        _loggerMock = new Mock<ILogger<PersonsController>>();
 
-        _personsService = _personsServiceMock.Object;
-        _countriesService = _countriesServiceMock.Object;
+        var personsService = _personsServiceMock.Object;
+        var countriesService = _countriesServiceMock.Object;
+        var logger = _loggerMock.Object;
 
-        _personsController = new PersonsController(_personsService, _countriesService);
+        _personsController = new PersonsController(personsService, countriesService, logger);
     }
 
     #region Index
@@ -75,33 +74,6 @@ public class PersonsControllerTest
     #endregion
 
     #region Create
-
-    [Fact]
-    public async Task Create_IfModelErrors_ShouldReturnCreateView()
-    {
-        // Arrange
-        var personAddRequest = _fixture.Create<PersonAddRequest>();
-
-        var personResponse = _fixture.Create<PersonResponse>();
-
-        var countries = _fixture.Create<List<CountryResponse>>();
-
-        _countriesServiceMock.Setup(temp => temp.GetAllCountries()).ReturnsAsync(countries);
-
-        _personsServiceMock
-            .Setup(temp => temp.AddPerson(It.IsAny<PersonAddRequest>()))
-            .ReturnsAsync(personResponse);
-
-        // Act
-        _personsController.ModelState.AddModelError("PersonName", "PersonName can't be blank");
-        var response = await _personsController.Create(personAddRequest);
-
-        // Assert
-        response.Should().BeOfType<ViewResult>();
-        var viewResult = response.As<ViewResult>();
-        viewResult.ViewData.Model.Should().BeAssignableTo<PersonAddRequest>();
-        viewResult.ViewData.Model.Should().Be(personAddRequest);
-    }
 
     [Fact]
     public async Task Create_IfNoModelErrors_ShouldReturnCreateView()

@@ -1,13 +1,6 @@
-using CrudExample.Filters.ActionFilters;
-using Entities;
-using Microsoft.AspNetCore.HttpLogging;
-using Microsoft.EntityFrameworkCore;
-using Repositories;
-using RepositoryContracts;
+using CrudExample.StartupExtensions;
 using Rotativa.AspNetCore;
 using Serilog;
-using ServiceContracts;
-using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,44 +14,7 @@ builder.Host.UseSerilog(
     }
 );
 
-builder.Services.AddHttpLogging(options =>
-{
-    options.LoggingFields =
-        HttpLoggingFields.RequestProperties | HttpLoggingFields.ResponsePropertiesAndHeaders;
-});
-
-builder.Services.AddTransient<ResponseHeaderActionFilter>();
-
-// Controller
-builder.Services.AddControllersWithViews(options =>
-{
-    var logger = builder
-        .Services.BuildServiceProvider()
-        .GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
-    options.Filters.Add(
-        new ResponseHeaderActionFilter(logger)
-        {
-            Key = "X-Global-Key",
-            Value = "Global-Value",
-            Order = 2
-        }
-    );
-});
-
-// Dependency Injection
-builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
-builder.Services.AddScoped<IPersonsRepository, PersonsRepository>();
-builder.Services.AddScoped<ICountriesService, CountriesService>();
-builder.Services.AddScoped<IPersonsService, PersonsService>();
-
-// Database context
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-    options.EnableSensitiveDataLogging();
-});
-
-builder.Services.AddTransient<PersonsListActionFilter>();
+builder.Services.ConfigureServices(builder.Configuration);
 
 // Build app
 var app = builder.Build();

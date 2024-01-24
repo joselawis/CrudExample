@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using AutoFixture;
 using Entities;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using RepositoryContracts;
 using ServiceContracts;
@@ -15,12 +16,9 @@ namespace CrudTests;
 public class PersonsServiceTest
 {
     private readonly IFixture _fixture;
-
+    private readonly Mock<ILogger<PersonsService>> _loggerMock;
     private readonly Mock<IPersonsRepository> _personsRepositoryMock;
-
-    // private fields
     private readonly IPersonsService _personsService;
-
     private readonly ITestOutputHelper _testOutputHelper;
 
     // constructor
@@ -28,10 +26,13 @@ public class PersonsServiceTest
     {
         _fixture = new Fixture();
         _personsRepositoryMock = new Mock<IPersonsRepository>();
+        _loggerMock = new Mock<ILogger<PersonsService>>();
+
         var personsRepository = _personsRepositoryMock.Object;
+        var logger = _loggerMock.Object;
 
         // Create services based on mocked DbContext object
-        _personsService = new PersonsService(personsRepository);
+        _personsService = new PersonsService(personsRepository, logger);
 
         _testOutputHelper = testOutputHelper;
     }
