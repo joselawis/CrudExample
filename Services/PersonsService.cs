@@ -16,7 +16,7 @@ namespace Services;
 
 public class PersonsService : IPersonsService
 {
-    private readonly ILogger<PersonsService> _logger;
+    private readonly ILogger<IPersonsService> _logger;
     private readonly IPersonsRepository _personsRepository;
 
     public PersonsService(IPersonsRepository personsRepository, ILogger<PersonsService> logger)
@@ -216,7 +216,7 @@ public class PersonsService : IPersonsService
         return memoryStream;
     }
 
-    public async Task<MemoryStream> GetPersonsExcel()
+    public virtual async Task<MemoryStream> GetPersonsExcel()
     {
         var memoryStream = new MemoryStream();
         using var excelPackage = new ExcelPackage(memoryStream);

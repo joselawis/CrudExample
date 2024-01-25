@@ -45,7 +45,8 @@ public static class ConfigureServicesExtension
         services.AddScoped<ICountriesRepository, CountriesRepository>();
         services.AddScoped<IPersonsRepository, PersonsRepository>();
         services.AddScoped<ICountriesService, CountriesService>();
-        services.AddScoped<IPersonsService, PersonsService>();
+        services.AddScoped<IPersonsService, PersonsServiceChild>();
+        //services.AddScoped<IPersonsService, PersonsService>();
 
         // Database context
         services.AddDbContext<ApplicationDbContext>(options =>
